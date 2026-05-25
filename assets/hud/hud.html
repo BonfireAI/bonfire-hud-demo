@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Bonfire HUD demo</title>
+  <link rel="stylesheet" href="/assets/hud/hud.css">
+  <!--
+    The HUD shell is the CANDY — re-skin it per engagement.
+
+    What ships in this template is a deliberately generic chrome (white field +
+    deep-blue letterform + electric-blue phosphorus halo) wrapped around a
+    Potree mount point. Swap the wordmark, retune the palette, change the
+    typography, drop in a knowledge-graph overlay — whatever shape your
+    engagement asks for. The theater stays Cotton Candy Parlor (that's the
+    factory at work); the HUD becomes the brand of the work.
+
+    Potree vendor libs are loaded at the bottom of <body> in the order Potree
+    1.8.2's reference viewer expects. hud.js mounts the viewer and points it at
+    /octree/metadata.json (served by the CLI from the cache).
+  -->
+</head>
+<body>
+  <main class="stage" id="stage">
+    <header class="header">
+      <div class="wordmark-wrap" aria-label="HUD wordmark — re-skin per engagement">
+        <!--
+          Wordmark slot.
+            · YOUR  → Big Shoulders Display 900 Black, letter-spacing 0.02em
+            · HUD   → Big Shoulders Display 100 Thin, letter-spacing 0.08em
+            · ink   → deep blue #003d80
+            · halo  → electric blue #0096ff phosphorus glow (4px + 12px Gaussian)
+          Replace YOUR / HUD with your engagement's marks. The halo filter and
+          rule treatment are the re-skinnable bones.
+        -->
+        <svg viewBox="0 0 600 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="HUD wordmark">
+          <defs>
+            <filter id="nv-halo" x="-20%" y="-40%" width="140%" height="180%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="b1"/>
+              <feFlood flood-color="#0096ff" flood-opacity="0.85"/>
+              <feComposite in2="b1" operator="in" result="halo1"/>
+              <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="b2"/>
+              <feFlood flood-color="#0096ff" flood-opacity="0.55"/>
+              <feComposite in2="b2" operator="in" result="halo2"/>
+              <feMerge>
+                <feMergeNode in="halo2"/>
+                <feMergeNode in="halo1"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <!-- twin precision rules above + below -->
+          <line x1="40" y1="24"  x2="560" y2="24"  stroke="#003d80" stroke-width="1" opacity="0.6"/>
+          <line x1="40" y1="30"  x2="560" y2="30"  stroke="#003d80" stroke-width="0.5" opacity="0.3"/>
+          <line x1="40" y1="116" x2="560" y2="116" stroke="#003d80" stroke-width="1" opacity="0.6"/>
+          <line x1="40" y1="122" x2="560" y2="122" stroke="#003d80" stroke-width="0.5" opacity="0.3"/>
+          <text x="300" y="96" text-anchor="middle"
+                font-family="'Big Shoulders Display', 'Saira', 'Inter', sans-serif"
+                font-size="68" fill="#003d80" filter="url(#nv-halo)">
+            <tspan font-weight="900" letter-spacing="0.02em">YOUR</tspan><tspan dx="18" font-weight="100" letter-spacing="0.08em">HUD</tspan>
+          </text>
+          <text x="40"  y="136" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="3" fill="#5c7390">RE-SKIN ME</text>
+          <text x="560" y="136" text-anchor="end" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="3" fill="#5c7390">HUD SHELL · v0</text>
+        </svg>
+      </div>
+      <div class="chrome-right" aria-label="HUD controls">
+        <span class="pill">scan loaded</span>
+        <button class="chrome-btn" type="button" aria-label="Settings" title="Settings">⚙</button>
+        <button class="chrome-btn" type="button" aria-label="Help"     title="Help">?</button>
+      </div>
+    </header>
+
+    <section class="main">
+      <!--
+        Potree mount point. hud.js wires the viewer here. Empty by design — drop
+        your own panels, overlays, or knowledge-graph nodes around or on top of
+        this mount in the engagement skin.
+      -->
+      <div id="potree_render_area"></div>
+
+      <div class="todo-card" role="note">
+        <span class="badge">RE-SKIN HERE</span>
+        <div class="body">
+          <div class="title">THIS IS THE CANDY · MAKE IT YOURS</div>
+          <p class="desc">
+            The shell ships generic so it ships fast. Swap the
+            <code>YOUR|HUD</code> wordmark, retune the palette tokens in
+            <code>hud.css</code>, and drop your engagement's panels into this
+            <code>.main</code> section. The Potree mount above keeps working
+            untouched.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <span>HUD shell · re-skinnable per engagement</span>
+      <span>template <b>v0.1</b> · powered by <b>Bonfire</b></span>
+    </footer>
+  </main>
+
+  <!--
+    Dual watermark · CandyFactory + Bonfire.
+    ~32px tall, 60% opacity, links to candyfactory.ai in a new tab.
+    Keep visible on shipped engagements — it's the maker's mark.
+  -->
+  <a class="watermark" href="https://candyfactory.ai" target="_blank" rel="noopener" aria-label="Built by CandyFactory · powered by Bonfire">
+    <span><span class="cf-candy">Candy</span><span class="cf-factory">Factory</span></span>
+    <span class="divider" aria-hidden="true"></span>
+    <span class="bonfire-pre">+</span>
+    <span class="ember" aria-hidden="true"></span>
+    <span class="bonfire">Bonfire</span>
+  </a>
+
+  <!--
+    Potree vendor libs · sourced from /assets/vendor/potree/ which the CLI
+    orchestrator vendors on first run. Load order matches Potree 1.8.2's
+    viewer.html template. hud.js reads window.Potree after these resolve.
+    Order matters: jquery → spectrum → jquery-ui → BinaryHeap → tween → d3 →
+    proj4 → openlayers3 → i18next → jstree → potree → laslaz.
+  -->
+  <script src="/assets/vendor/potree/libs/jquery/jquery-3.1.1.min.js"></script>
+  <script src="/assets/vendor/potree/libs/spectrum/spectrum.js"></script>
+  <script src="/assets/vendor/potree/libs/jquery-ui/jquery-ui.min.js"></script>
+  <script src="/assets/vendor/potree/libs/other/BinaryHeap.js"></script>
+  <script src="/assets/vendor/potree/libs/tween/tween.min.js"></script>
+  <script src="/assets/vendor/potree/libs/d3/d3.js"></script>
+  <script src="/assets/vendor/potree/libs/proj4/proj4.js"></script>
+  <script src="/assets/vendor/potree/libs/openlayers3/ol.js"></script>
+  <script src="/assets/vendor/potree/libs/i18next/i18next.js"></script>
+  <script src="/assets/vendor/potree/libs/jstree/jstree.js"></script>
+  <script src="/assets/vendor/potree/build/potree/potree.js"></script>
+  <script src="/assets/vendor/potree/libs/plasio/js/laslaz.js"></script>
+  <script src="/assets/hud/hud.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  chunk.svg — static SVG port of candyfactory-design/ui_kits/cockpit/chunk.jsx.
+  Source-of-truth: 6 moods (idle, working, sleeping, baking, cheer, oops)
+                 × 4 palettes (pink, butter, mint, grape) = 24 addressable symbols.
+
+  Usage from theater.js:
+    <svg viewBox="0 0 140 140"><use href="chunk.svg#chunk-working-pink"/></svg>
+    or change href dynamically to swap mood/palette.
+
+  Each symbol has its own clipPath id, suffixed with the palette+mood key so
+  multiple <use> instances on the same page don't clash. The body shape is
+  identical across all 24; only stripes/face/face-extras change.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute; width:0; height:0; overflow:hidden;" aria-hidden="true">
+  <defs>
+    <!-- baseline shadow shared across all symbols -->
+    <ellipse id="chunk-shadow" cx="70" cy="128" rx="44" ry="5" fill="#1a1626" opacity="0.18"/>
+    <!-- top face highlight shared across all symbols -->
+    <path id="chunk-tophighlight" d="M28 50 L70 28 L112 50 L70 72 Z" fill="#ffffff" opacity="0.18"/>
+    <!-- ink outline shared -->
+    <path id="chunk-outline" d="M28 50 L70 28 L112 50 L112 100 L70 122 L28 100 Z" fill="none" stroke="#1a1626" stroke-width="3.2" stroke-linejoin="round"/>
+    <path id="chunk-edges" d="M28 50 L70 72 L112 50 M70 72 L70 122" fill="none" stroke="#1a1626" stroke-width="2.4" stroke-linejoin="round" opacity="0.85"/>
+  </defs>
+
+  <!-- ============================================================
+       FACE GROUPS (rendered on every symbol, switched by mood key)
+       Eye + mouth + extras layer.
+       ============================================================ -->
+  <defs>
+    <!-- ───── eyes ───── -->
+    <g id="chunk-eyes-open">
+      <circle cx="54" cy="80" r="4" fill="#1a1626"/>
+      <circle cx="78" cy="80" r="4" fill="#1a1626"/>
+      <circle cx="55.5" cy="78.5" r="1.2" fill="#ffffff"/>
+      <circle cx="79.5" cy="78.5" r="1.2" fill="#ffffff"/>
+    </g>
+    <g id="chunk-eyes-focused" stroke="#1a1626" stroke-width="2.5" stroke-linecap="round">
+      <line x1="50" y1="80" x2="58" y2="80"/>
+      <line x1="74" y1="80" x2="82" y2="80"/>
+    </g>
+    <g id="chunk-eyes-closed" fill="none" stroke="#1a1626" stroke-width="2.4" stroke-linecap="round">
+      <path d="M50 80 Q54 84 58 80"/>
+      <path d="M74 80 Q78 84 82 80"/>
+    </g>
+    <g id="chunk-eyes-starry" fill="#ffd84d" stroke="#1a1626" stroke-width="1.6" stroke-linejoin="round">
+      <path d="M54 76 L56 80 L60 80 L57 83 L58 87 L54 84 L50 87 L51 83 L48 80 L52 80 Z"/>
+      <path d="M78 76 L80 80 L84 80 L81 83 L82 87 L78 84 L74 87 L75 83 L72 80 L76 80 Z"/>
+    </g>
+    <g id="chunk-eyes-wide">
+      <circle cx="54" cy="80" r="5" fill="#ffffff" stroke="#1a1626" stroke-width="2"/>
+      <circle cx="78" cy="80" r="5" fill="#ffffff" stroke="#1a1626" stroke-width="2"/>
+      <circle cx="54" cy="80" r="2.4" fill="#1a1626"/>
+      <circle cx="78" cy="80" r="2.4" fill="#1a1626"/>
+    </g>
+
+    <!-- ───── mouths ───── -->
+    <path id="chunk-mouth-smile" d="M58 96 Q66 102 74 96" fill="none" stroke="#1a1626" stroke-width="2.4" stroke-linecap="round"/>
+    <path id="chunk-mouth-open"  d="M60 96 Q66 104 72 96 Q66 100 60 96 Z" fill="#1a1626"/>
+    <path id="chunk-mouth-wide"  d="M54 94 Q66 108 78 94 Q66 102 54 94 Z" fill="#1a1626"/>
+    <ellipse id="chunk-mouth-o"  cx="66" cy="98" rx="3" ry="4" fill="#1a1626"/>
+
+    <!-- ───── blush ───── -->
+    <g id="chunk-blush">
+      <ellipse cx="48" cy="92" rx="6" ry="3" fill="#ff3b6b" opacity="0.55"/>
+      <ellipse cx="84" cy="92" rx="6" ry="3" fill="#ff3b6b" opacity="0.55"/>
+    </g>
+
+    <!-- ───── extras ───── -->
+    <path id="chunk-sweat" d="M96 70 Q100 80 96 84 Q92 80 96 70 Z" fill="#5fb8ff" stroke="#1a1626" stroke-width="1.4"/>
+    <g id="chunk-z" fill="#1a1626" font-family="Fredoka, sans-serif" font-weight="700">
+      <text x="98" y="56" font-size="14">z</text>
+      <text x="108" y="46" font-size="11" opacity="0.7">z</text>
+    </g>
+    <g id="chunk-steam" fill="none" stroke="#1a1626" stroke-width="1.8" stroke-linecap="round" opacity="0.7">
+      <path d="M40 36 Q44 30 40 24 Q36 18 40 12"/>
+      <path d="M70 30 Q74 24 70 18 Q66 12 70 6"/>
+      <path d="M100 36 Q104 30 100 24 Q96 18 100 12"/>
+    </g>
+  </defs>
+
+  <!-- ============================================================
+       BODY DEFS — one per palette (clipPath + striped fill rect)
+       Pink:   #ff5fa2 · #ffffff · #ff3b6b
+       Butter: #ffd84d · #ffffff · #ff5fa2
+       Mint:   #5fd4c4 · #ffffff · #a96bff
+       Grape:  #a96bff · #ffffff · #ffd84d
+       ============================================================ -->
+  <defs>
+    <clipPath id="chunk-clip-pink"><path d="M28 50 L70 28 L112 50 L112 100 L70 122 L28 100 Z"/></clipPath>
+    <clipPath id="chunk-clip-butter"><path d="M28 50 L70 28 L112 50 L112 100 L70 122 L28 100 Z"/></clipPath>
+    <clipPath id="chunk-clip-mint"><path d="M28 50 L70 28 L112 50 L112 100 L70 122 L28 100 Z"/></clipPath>
+    <clipPath id="chunk-clip-grape"><path d="M28 50 L70 28 L112 50 L112 100 L70 122 L28 100 Z"/></clipPath>
+
+    <g id="chunk-body-pink" clip-path="url(#chunk-clip-pink)">
+      <rect x="0" y="0" width="140" height="140" fill="#ff5fa2"/>
+      <g transform="rotate(28 70 70)">
+        <rect x="-30" y="0" width="14" height="180" fill="#ffffff"/>
+        <rect x="0"   y="0" width="14" height="180" fill="#ffffff"/>
+        <rect x="30"  y="0" width="14" height="180" fill="#ff3b6b" opacity="0.55"/>
+        <rect x="60"  y="0" width="14" height="180" fill="#ffffff"/>
+        <rect x="90"  y="0" width="14" height="180" fill="#ffffff"/>
+      </g>
+    </g>
+    <g id="chunk-body-butter" clip-path="url(#chunk-clip-butter)">
+      <rect x="0" y="0" width="140" height="140" fill="#ffd84d"/>
+      <g transform="rotate(28 70 70)">
+        <rect x="-30" y="0" width="14" height="180" fill="#ffffff"/>
+        <rect x="0"   y="0" width="14" height="180" fill="#ffffff"/>
+        <rect x="30"  y="0" width="14" height="180" fill="#ff5fa2" opacity="0.55"/>
+        <rect x="60"  y="0" width="14" height="180" fill="#ffffff"/>
+        <rect x="90"  y="0" width="14" height="180" fill="#ffffff"/>
+      </g>
+    </g>
+    <g id="chunk-body-mint" clip-path="url(#chunk-clip-mint)">
+      <rect x="0" y="0" width="140" height="140" fill="#5fd4c4"/>
+      <g transform="rotate(28 70 70)">
+        <rect x="-30" y="0" width="14" height="180" fill="#ffffff"/>
+        <rect x="0"   y="0" width="14" height="180" fill="#ffffff"/>
+        <rect x="30"  y="0" width="14" height="180" fill="#a96bff" opacity="0.55"/>
+        <rect x="60"  y="0" width="14" height="180" fill="#ffffff"/>
+        <rect x="90"  y="0" width="14" height="180" fill="#ffffff"/>
+      </g>
+    </g>
+    <g id="chunk-body-grape" clip-path="url(#chunk-clip-grape)">
+      <rect x="0" y="0" width="140" height="140" fill="#a96bff"/>
+      <g transform="rotate(28 70 70)">
+        <rect x="-30" y="0" width="14" height="180" fill="#ffffff"/>
+        <rect x="0"   y="0" width="14" height="180" fill="#ffffff"/>
+        <rect x="30"  y="0" width="14" height="180" fill="#ffd84d" opacity="0.55"/>
+        <rect x="60"  y="0" width="14" height="180" fill="#ffffff"/>
+        <rect x="90"  y="0" width="14" height="180" fill="#ffffff"/>
+      </g>
+    </g>
+  </defs>
+
+  <!-- ============================================================
+       SYMBOLS — 24 of them, generated combinatorially.
+       Naming: chunk-{mood}-{palette}
+       ============================================================ -->
+
+  <!-- ────────────────────── IDLE ────────────────────── -->
+  <!-- face: eyes open · smile · blush · z=false -->
+  <symbol id="chunk-idle-pink" viewBox="0 0 140 140">
+    <use href="#chunk-shadow"/>
+    <use href="#chunk-body-pink"/>
+    <path d="M28 50 L70 28 L112 50 L70 72 Z" fill="#fff" opacity="0.18" clip-path="url(#chunk-clip-pink)"/>
+    <use href="#chunk-outline"/><use href="#chunk-edges"/>
+    <use href="#chunk-blush"/><use href="#chunk-eyes-open"/><use href="#chunk-mouth-smile"/>
+  </symbol>
+  <symbol id="chunk-idle-butter" viewBox="0 0 140 140">
+    <use href="#chunk-shadow"/>
+    <use href="#chunk-body-butter"/>
+    <path d="M28 50 L70 28 L112 50 L70 72 Z" fill="#fff" opacity="0.18" clip-path="url(#chunk-clip-butter)"/>
+    <use href="#chunk-outline"/><use href="#chunk-edges"/>
+    <use href="#chunk-blush"/><use href="#chunk-eyes-open"/><use href="#chunk-mouth-smile"/>
+  </symbol>
+  <symbol id="chunk-idle-mint" viewBox="0 0 140 140">
+    <use href="#chunk-shadow"/>
+    <use href="#chunk-body-mint"/>
+    <path d="M28 50 L70 28 L112 50 L70 72 Z" fill="#fff" opacity="0.18" clip-path="url(#chunk-clip-mint)"/>
+    <use href="#chunk-outline"/><use href="#chunk-edges"/>
+    <use href="#chunk-blush"/><use href="#chunk-eyes-open"/><use href="#chunk-mouth-smile"/>
+  </symbol>
+  <symbol id="chunk-idle-grape" viewBox="0 0 140 140">
+    <use href="#chunk-shadow"/>
+    <use href="#chunk-body-grape"/>
+    <path d="M28 50 L70 28 L112 50 L70 72 Z" fill="#fff" opacity="0.18" clip-path="url(#chunk-clip-grape)"/>
+    <use href="#chunk-outline"/><use href="#chunk-edges"/>
+    <use href="#chunk-blush"/><use href="#chunk-eyes-open"/><use href="#chunk-mouth-smile"/>
+  </symbol>
+
+  <!-- ────────────────────── WORKING ────────────────────── -->
+  <!-- face: eyes focused · mouth open · no blush -->
+  <symbol id="chunk-working-pink" viewBox="0 0 140 140">
+    <use href="#chunk-shadow"/>
+    <use href="#chunk-body-pink"/>
+    <path d="M28 50 L70 28 L112 50 L70 72 Z" fill="#fff" opacity="0.18" clip-path="url(#chunk-clip-pink)"/>
+    <use href="#chunk-outline"/><use href="#chunk-edges"/>
+    <use href="#chunk-eyes-focused"/><use href="#chunk-mouth-open"/>
+  </symbol>
+  <symbol id="chunk-working-butter" viewBox="0 0 140 140">
+    <use href="#chunk-shadow"/>
+    <use href="#chunk-body-butter"/>
+    <path d="M28 50 L70 28 L112 50 L70 72 Z" fill="#fff" opacity="0.18" clip-path="url(#chunk-clip-butter)"/>
+    <use href="#chunk-outline"/><use href="#chunk-edges"/>
+    <use href="#chunk-eyes-focused"/><use href="#chunk-mouth-open"/>
+  </symbol>
+  <symbol id="chunk-working-mint" viewBox="0 0 140 140">
+    <use href="#chunk-shadow"/>
+    <use href="#chunk-body-mint"/>
+    <path d="M28 50 L70 28 L112 50 L70 72 Z" fill="#fff" opacity="0.18" clip-path="url(#chunk-clip-mint)"/>
+    <use href="#chunk-outline"/><use href="#chunk-edges"/>
+    <use href="#chunk-eyes-focused"/><use href="#chunk-mouth-open"/>
+  </symbol>
+  <symbol id="chunk-working-grape" viewBox="0 0 140 140">
+    <use href="#chunk-shadow"/>
+    <use href="#chunk-body-grape"/>
+    <path d="M28 50 L70 28 L112 50 L70 72 Z" fill="#fff" opacity="0.18" clip-path="url(#chunk-clip-grape)"/>
+    <use href="#chunk-outline"/><use href="#chunk-edges"/>
+    <use href="#chunk-eyes-focused"/><use href="#chunk-mouth-open"/>
+  </symbol>
+
+  <!-- ────────────────────── SLEEPING ────────────────────── -->
+  <!-- face: eyes closed · smile · blush · z's -->
+  <symbol id="chunk-sleeping-pink" viewBox="0 0 140 140">
+    <use href="#chunk-shadow"/>
+    <use href="#chunk-body-pink"/>
+    <path d="M28 50 L70 28 L112 50 L70 72 Z" fill="#fff" opacity="0.18" clip-path="url(#chunk-clip-pink)"/>
+    <use href="#chunk-outline"/><use href="#chunk-edges"/>
+    <use href="#chunk-blush"/><use href="#chunk-eyes-closed"/><use href="#chunk-mouth-smile"/><use href="#chunk-z"/>
+  </symbol>
+  <symbol id="chunk-sleeping-butter" viewBox="0 0 140 140">
+    <use href="#chunk-shadow"/>
+    <use href="#chunk-body-butter"/>
+    <path d="M28 50 L70 28 L112 50 L70 72 Z" fill="#fff" opacity="0.18" clip-path="url(#chunk-clip-butter)"/>
+    <use href="#chunk-outline"/><use href="#chunk-edges"/>
+    <use href="#chunk-blush"/><use href="#chunk-eyes-closed"/><use href="#chunk-mouth-smile"/><use href="#chunk-z"/>
+  </symbol>
+  <symbol id="chunk-sleeping-mint" viewBox="0 0 140 140">
+    <use href="#chunk-shadow"/>
+    <use href="#chunk-body-mint"/>
+    <path d="M28 50 L70 28 L112 50 L70 72 Z" fill="#fff" opacity="0.18" clip-path="url(#chunk-clip-mint)"/>
+    <use href="#chunk-outline"/><use href="#chunk-edges"/>
+    <use href="#chunk-blush"/><use href="#chunk-eyes-closed"/><use href="#chunk-mouth-smile"/><use href="#chunk-z"/>
+  </symbol>
+  <symbol id="chunk-sleeping-grape" viewBox="0 0 140 140">
+    <use href="#chunk-shadow"/>
+    <use href="#chunk-body-grape"/>
+    <path d="M28 50 L70 28 L112 50 L70 72 Z" fill="#fff" opacity="0.18" clip-path="url(#chunk-clip-grape)"/>
+    <use href="#chunk-outline"/><use href="#chunk-edges"/>
+    <use href="#chunk-blush"/><use href="#chunk-eyes-closed"/><use href="#chunk-mouth-smile"/><use href="#chunk-z"/>
+  </symbol>
+
+  <!-- ────────────────────── BAKING ────────────────────── -->
+  <!-- face: eyes open · smile · blush · steam wisps -->
+  <symbol id="chunk-baking-pink" viewBox="0 0 140 140">
+    <use href="#chunk-shadow"/>
+    <use href="#chunk-body-pink"/>
+    <path d="M28 50 L70 28 L112 50 L70 72 Z" fill="#fff" opacity="0.18" clip-path="url(#chunk-clip-pink)"/>
+    <use href="#chunk-outline"/><use href="#chunk-edges"/>
+    <use href="#chunk-blush"/><use href="#chunk-eyes-open"/><use href="#chunk-mouth-smile"/><use href="#chunk-steam"/>
+  </symbol>
+  <symbol id="chunk-baking-butter" viewBox="0 0 140 140">
+    <use href="#chunk-shadow"/>
+    <use href="#chunk-body-butter"/>
+    <path d="M28 50 L70 28 L112 50 L70 72 Z" fill="#fff" opacity="0.18" clip-path="url(#chunk-clip-butter)"/>
+    <use href="#chunk-outline"/><use href="#chunk-edges"/>
+    <use href="#chunk-blush"/><use href="#chunk-eyes-open"/><use href="#chunk-mouth-smile"/><use href="#chunk-steam"/>
+  </symbol>
+  <symbol id="chunk-baking-mint" viewBox="0 0 140 140">
+    <use href="#chunk-shadow"/>
+    <use href="#chunk-body-mint"/>
+    <path d="M28 50 L70 28 L112 50 L70 72 Z" fill="#fff" opacity="0.18" clip-path="url(#chunk-clip-mint)"/>
+    <use href="#chunk-outline"/><use href="#chunk-edges"/>
+    <use href="#chunk-blush"/><use href="#chunk-eyes-open"/><use href="#chunk-mouth-smile"/><use href="#chunk-steam"/>
+  </symbol>
+  <symbol id="chunk-baking-grape" viewBox="0 0 140 140">
+    <use href="#chunk-shadow"/>
+    <use href="#chunk-body-grape"/>
+    <path d="M28 50 L70 28 L112 50 L70 72 Z" fill="#fff" opacity="0.18" clip-path="url(#chunk-clip-grape)"/>
+    <use href="#chunk-outline"/><use href="#chunk-edges"/>
+    <use href="#chunk-blush"/><use href="#chunk-eyes-open"/><use href="#chunk-mouth-smile"/><use href="#chunk-steam"/>
+  </symbol>
+
+  <!-- ────────────────────── CHEER ────────────────────── -->
+  <!-- face: eyes starry · mouth wide · blush -->
+  <symbol id="chunk-cheer-pink" viewBox="0 0 140 140">
+    <use href="#chunk-shadow"/>
+    <use href="#chunk-body-pink"/>
+    <path d="M28 50 L70 28 L112 50 L70 72 Z" fill="#fff" opacity="0.18" clip-path="url(#chunk-clip-pink)"/>
+    <use href="#chunk-outline"/><use href="#chunk-edges"/>
+    <use href="#chunk-blush"/><use href="#chunk-eyes-starry"/><use href="#chunk-mouth-wide"/>
+  </symbol>
+  <symbol id="chunk-cheer-butter" viewBox="0 0 140 140">
+    <use href="#chunk-shadow"/>
+    <use href="#chunk-body-butter"/>
+    <path d="M28 50 L70 28 L112 50 L70 72 Z" fill="#fff" opacity="0.18" clip-path="url(#chunk-clip-butter)"/>
+    <use href="#chunk-outline"/><use href="#chunk-edges"/>
+    <use href="#chunk-blush"/><use href="#chunk-eyes-starry"/><use href="#chunk-mouth-wide"/>
+  </symbol>
+  <symbol id="chunk-cheer-mint" viewBox="0 0 140 140">
+    <use href="#chunk-shadow"/>
+    <use href="#chunk-body-mint"/>
+    <path d="M28 50 L70 28 L112 50 L70 72 Z" fill="#fff" opacity="0.18" clip-path="url(#chunk-clip-mint)"/>
+    <use href="#chunk-outline"/><use href="#chunk-edges"/>
+    <use href="#chunk-blush"/><use href="#chunk-eyes-starry"/><use href="#chunk-mouth-wide"/>
+  </symbol>
+  <symbol id="chunk-cheer-grape" viewBox="0 0 140 140">
+    <use href="#chunk-shadow"/>
+    <use href="#chunk-body-grape"/>
+    <path d="M28 50 L70 28 L112 50 L70 72 Z" fill="#fff" opacity="0.18" clip-path="url(#chunk-clip-grape)"/>
+    <use href="#chunk-outline"/><use href="#chunk-edges"/>
+    <use href="#chunk-blush"/><use href="#chunk-eyes-starry"/><use href="#chunk-mouth-wide"/>
+  </symbol>
+
+  <!-- ────────────────────── OOPS ────────────────────── -->
+  <!-- face: eyes wide · mouth o · no blush · sweat drop -->
+  <symbol id="chunk-oops-pink" viewBox="0 0 140 140">
+    <use href="#chunk-shadow"/>
+    <use href="#chunk-body-pink"/>
+    <path d="M28 50 L70 28 L112 50 L70 72 Z" fill="#fff" opacity="0.18" clip-path="url(#chunk-clip-pink)"/>
+    <use href="#chunk-outline"/><use href="#chunk-edges"/>
+    <use href="#chunk-eyes-wide"/><use href="#chunk-mouth-o"/><use href="#chunk-sweat"/>
+  </symbol>
+  <symbol id="chunk-oops-butter" viewBox="0 0 140 140">
+    <use href="#chunk-shadow"/>
+    <use href="#chunk-body-butter"/>
+    <path d="M28 50 L70 28 L112 50 L70 72 Z" fill="#fff" opacity="0.18" clip-path="url(#chunk-clip-butter)"/>
+    <use href="#chunk-outline"/><use href="#chunk-edges"/>
+    <use href="#chunk-eyes-wide"/><use href="#chunk-mouth-o"/><use href="#chunk-sweat"/>
+  </symbol>
+  <symbol id="chunk-oops-mint" viewBox="0 0 140 140">
+    <use href="#chunk-shadow"/>
+    <use href="#chunk-body-mint"/>
+    <path d="M28 50 L70 28 L112 50 L70 72 Z" fill="#fff" opacity="0.18" clip-path="url(#chunk-clip-mint)"/>
+    <use href="#chunk-outline"/><use href="#chunk-edges"/>
+    <use href="#chunk-eyes-wide"/><use href="#chunk-mouth-o"/><use href="#chunk-sweat"/>
+  </symbol>
+  <symbol id="chunk-oops-grape" viewBox="0 0 140 140">
+    <use href="#chunk-shadow"/>
+    <use href="#chunk-body-grape"/>
+    <path d="M28 50 L70 28 L112 50 L70 72 Z" fill="#fff" opacity="0.18" clip-path="url(#chunk-clip-grape)"/>
+    <use href="#chunk-outline"/><use href="#chunk-edges"/>
+    <use href="#chunk-eyes-wide"/><use href="#chunk-mouth-o"/><use href="#chunk-sweat"/>
+  </symbol>
+</svg>

@@ -1,0 +1,7 @@
+# All vendored libs in this folder are auto-downloaded by
+# hud-demo.mjs at first run from the upstream Potree release.
+# They are large (~35 MB) and not part of our source tree.
+#
+# Cache mirror: ~/.cache/candyfactory/potree-viewer/
+*
+!.gitignore

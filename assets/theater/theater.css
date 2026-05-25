@@ -1,0 +1,447 @@
+/* ============================================================================
+   theater.css — CandyFactory home shell (the theater).
+   The brand surface that plays during build. Cotton Candy Parlor full-bleed.
+   Tokens mirror candyfactory-design/colors_and_type.css + ui_kits/marketing/parlor.css.
+   ============================================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Big+Shoulders+Display:wght@100;700;900&display=swap");
+
+:root {
+  --bg:        #fff8e7;
+  --bg-soft:   #ffeec8;
+  --paper:     #ffffff;
+  --ink:       #1a1626;
+  --ink-soft:  #5a4a6a;
+
+  --brand-a:   #ff5fa2;   /* candy pink */
+  --brand-b:   #5fd4c4;   /* mint */
+  --brand-c:   #5fb8ff;   /* sky */
+  --brand-d:   #ffd84d;   /* butter */
+  --brand-hot: #ff3b6b;   /* cherry */
+  --brand-pop: #a96bff;   /* grape */
+
+  --display:   'Fredoka', sans-serif;
+  --body:      'Inter', system-ui, sans-serif;
+  --mono:      'IBM Plex Mono', ui-monospace, monospace;
+
+  --r-sm:  8px;
+  --r-md:  12px;
+  --r-lg:  18px;
+  --r-pill: 999px;
+
+  --stroke:        2.5px;
+  --stroke-soft:   2px;
+  --shadow-sm:     3px 3px 0 var(--ink);
+  --shadow-md:     6px 6px 0 var(--ink);
+  --shadow-lg:     8px 8px 0 var(--ink);
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  overflow: hidden;
+}
+
+/* ============================================================================
+   FULL-BLEED STAGE — fills viewport, sticker-grid wash behind
+   ============================================================================ */
+.stage {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  padding: 28px 40px 22px;
+  gap: 22px;
+  z-index: 1;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 18% 28%, color-mix(in oklab, var(--brand-c) 24%, transparent) 0, transparent 80px),
+    radial-gradient(circle at 82% 72%, color-mix(in oklab, var(--brand-a) 22%, transparent) 0, transparent 100px),
+    radial-gradient(circle at 64% 18%, color-mix(in oklab, var(--brand-d) 24%, transparent) 0, transparent 90px),
+    radial-gradient(circle at 28% 80%, color-mix(in oklab, var(--brand-pop) 18%, transparent) 0, transparent 110px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ============================================================================
+   HEADER — wordmark + build status
+   ============================================================================ */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding-bottom: 18px;
+  border-bottom: var(--stroke) solid var(--ink);
+  font-family: var(--display);
+}
+.header-left {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+.wordmark {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: -0.01em;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.18em;
+}
+.wordmark .candy   { color: var(--brand-hot); }
+.wordmark .factory { color: var(--brand-pop); }
+.header-tag {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  padding: 5px 12px;
+  border: 1.5px solid var(--ink);
+  border-radius: var(--r-pill);
+  background: var(--paper);
+}
+.header-right {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.header-right .pulse {
+  display: inline-block;
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  background: var(--brand-hot);
+  border: 1.5px solid var(--ink);
+  margin-right: 10px;
+  box-shadow: 0 0 0 6px color-mix(in oklab, var(--brand-hot) 28%, transparent);
+  animation: pulse 1.8s infinite;
+  vertical-align: middle;
+}
+@keyframes pulse { 50% { opacity: 0.45; box-shadow: 0 0 0 9px color-mix(in oklab, var(--brand-hot) 18%, transparent); } }
+
+/* ============================================================================
+   MAIN — chunk box (left) + terminal (right)
+   ============================================================================ */
+.main {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.7fr) minmax(420px, 1.4fr);
+  gap: 28px;
+  min-height: 0;
+}
+
+/* ── Chunk box ── */
+.chunk-box {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--paper);
+  border: var(--stroke) solid var(--ink);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+.chunk-box::before {
+  /* soft halo behind chunk */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 56%, color-mix(in oklab, var(--brand-d) 26%, transparent) 0, transparent 50%);
+  z-index: 0;
+}
+.chunk-anchor {
+  position: relative;
+  z-index: 1;
+  width: 220px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: chunk-bob 2s ease-in-out infinite alternate, chunk-tilt 3s ease-in-out infinite alternate;
+  will-change: transform;
+}
+.chunk-anchor svg {
+  width: 200px;
+  height: 200px;
+  overflow: visible;
+  transform: rotate(-3deg);
+  transform-origin: center;
+}
+.chunk-anchor.cheer { animation: chunk-bob 2s ease-in-out infinite alternate, chunk-tilt 3s ease-in-out infinite alternate, chunk-cheer 1s ease-out; }
+.chunk-anchor.oops  { animation: chunk-bob-oops 0.6s ease-in-out 3, chunk-tilt 3s ease-in-out infinite alternate; }
+
+@keyframes chunk-bob   { from { transform: translateY(-6px); } to { transform: translateY(6px); } }
+@keyframes chunk-tilt  { from { rotate: -2deg; }              to { rotate: 2deg; } }
+@keyframes chunk-cheer { 0% { scale: 1; } 20% { scale: 1.18; } 40% { scale: 0.96; } 60% { scale: 1.08; } 100% { scale: 1; } }
+@keyframes chunk-bob-oops {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-8px, 4px); }
+  75% { transform: translate(8px, 4px); }
+}
+
+.chunk-label {
+  position: relative;
+  z-index: 1;
+  margin-top: 18px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-align: center;
+}
+.chunk-label b { color: var(--ink); font-weight: 600; }
+
+/* ── Terminal monitor pane ── */
+.term {
+  background: #1a1626;
+  color: #fff8e7;
+  border: var(--stroke) solid var(--ink);
+  border-radius: var(--r-md);
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.55;
+  letter-spacing: 0.01em;
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.term-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: #2a1f3a;
+  border-bottom: 2px solid #000;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #ffd6e6;
+  flex: 0 0 auto;
+}
+.term-bar .dots { display: flex; gap: 6px; }
+.term-bar .dots i {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid #000;
+  display: block;
+}
+.term-bar .dots i:nth-child(1) { background: #ff3b6b; }
+.term-bar .dots i:nth-child(2) { background: #ffd84d; }
+.term-bar .dots i:nth-child(3) { background: #5fd4c4; }
+.term-bar .title { flex: 1; }
+.term-bar .right { color: #ffd84d; }
+.term-body {
+  flex: 1 1 auto;
+  padding: 16px 20px 20px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  scrollbar-color: #5a4a6a #1a1626;
+  scrollbar-width: thin;
+}
+.term-body::-webkit-scrollbar { width: 8px; }
+.term-body::-webkit-scrollbar-track { background: #1a1626; }
+.term-body::-webkit-scrollbar-thumb { background: #5a4a6a; border-radius: 4px; }
+
+.term-line {
+  display: block;
+  padding: 1px 0;
+  opacity: 0;
+  animation: term-fade 200ms ease-out forwards;
+}
+@keyframes term-fade { from { opacity: 0; transform: translateY(2px); } to { opacity: 1; transform: translateY(0); } }
+
+.term-line.info    { color: #fff8e7; }
+.term-line.success { color: #5fd4c4; }
+.term-line.download{ color: #ffd84d; }
+.term-line.warn    { color: #ffd84d; }
+.term-line.error   { color: #ff3b6b; }
+.term-line.stage   { color: #ff5fa2; font-weight: 600; }
+.term-line.progress{ color: #ffd84d; }
+.term-line .glyph  { display: inline-block; width: 1.4em; text-align: left; }
+.term-line .ts {
+  color: #8a7a9a;
+  margin-right: 10px;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+}
+
+/* ============================================================================
+   PROGRESS — cotton-candy striped bar + stage caption
+   ============================================================================ */
+.progress {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.bar {
+  position: relative;
+  height: 18px;
+  border: var(--stroke) solid var(--ink);
+  border-radius: var(--r-pill);
+  background: var(--paper);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.bar-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0%;
+  background:
+    repeating-linear-gradient(45deg,
+      var(--brand-hot) 0 14px,
+      var(--brand-a) 14px 28px);
+  background-size: 200% 100%;
+  animation: bar-march 1.2s linear infinite;
+  transition: width 600ms cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+@keyframes bar-march { from { background-position: 0 0; } to { background-position: 56px 0; } }
+
+.bar-fill.butter { background: repeating-linear-gradient(45deg, var(--brand-d) 0 14px, #ffe27a 14px 28px); animation: bar-march 1.2s linear infinite; }
+.bar-fill.mint   { background: repeating-linear-gradient(45deg, var(--brand-b) 0 14px, #8fe5d9 14px 28px); animation: bar-march 1.2s linear infinite; }
+.bar-fill.grape  { background: repeating-linear-gradient(45deg, var(--brand-pop) 0 14px, #c79bff 14px 28px); animation: bar-march 1.2s linear infinite; }
+.bar-fill.pink   { background: repeating-linear-gradient(45deg, var(--brand-hot) 0 14px, var(--brand-a) 14px 28px); animation: bar-march 1.2s linear infinite; }
+
+.bar-pct {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--r-pill);
+  padding: 2px 9px;
+  z-index: 1;
+}
+
+.caption {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 18px;
+  font-family: var(--body);
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--ink);
+}
+.caption .stage-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.caption .stage-num b { color: var(--brand-hot); font-weight: 700; }
+.caption .stage-text { flex: 1; }
+.caption .stage-text b { font-weight: 600; }
+
+/* ============================================================================
+   FOOTER — discreet "powered by" strip
+   ============================================================================ */
+.foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: var(--stroke) solid var(--ink);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.foot .left  { display: flex; align-items: center; gap: 10px; }
+.foot .right { display: flex; align-items: center; gap: 10px; }
+.foot b { color: var(--ink); font-weight: 600; }
+.foot .dot {
+  display: inline-block;
+  width: 6px; height: 6px;
+  background: var(--brand-hot);
+  border-radius: 50%;
+}
+
+/* ============================================================================
+   ERROR CARD — shown on `error` SSE event (replaces caption row)
+   ============================================================================ */
+.error-card {
+  display: none;
+  background: var(--paper);
+  border: var(--stroke) solid var(--brand-hot);
+  border-radius: var(--r-md);
+  padding: 14px 18px;
+  box-shadow: 6px 6px 0 var(--brand-hot);
+  font-family: var(--body);
+  color: var(--ink);
+}
+.error-card.show { display: block; }
+.error-card .label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--brand-hot);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.error-card .msg { font-size: 15px; font-weight: 500; }
+
+/* ============================================================================
+   DONE FADE — full-surface fade to white over 600ms
+   ============================================================================ */
+.fade-out {
+  pointer-events: none;
+  animation: fade-to-white 600ms ease-out forwards;
+}
+@keyframes fade-to-white {
+  from { opacity: 1; background: var(--bg); }
+  to   { opacity: 0.2; background: #ffffff; }
+}
+.fade-cover {
+  position: fixed;
+  inset: 0;
+  background: #ffffff;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 99;
+  transition: opacity 600ms ease-out;
+}
+.fade-cover.on { opacity: 1; }
+
+/* ============================================================================
+   RESPONSIVE — sane down to 900px
+   ============================================================================ */
+@media (max-width: 900px) {
+  .stage { padding: 20px 22px 18px; gap: 16px; }
+  .main { grid-template-columns: 1fr; }
+  .chunk-anchor { width: 180px; height: 180px; }
+  .chunk-anchor svg { width: 160px; height: 160px; }
+  .header-right { font-size: 16px; }
+  .wordmark { font-size: 22px; }
+}

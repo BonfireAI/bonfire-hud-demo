@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>CandyFactory — building your HUD</title>
+  <link rel="stylesheet" href="/assets/theater/theater.css">
+</head>
+<body>
+  <!-- chunk symbol library is served as /assets/theater/chunk.svg with a
+       <symbol> per (mood × palette). <use href="chunk.svg#..."> references
+       resolve cross-file in evergreen browsers (same origin). -->
+
+  <main class="stage" id="stage">
+    <header class="header">
+      <div class="header-left">
+        <span class="wordmark"><span class="candy">Candy</span><span class="factory">Factory</span></span>
+        <span class="header-tag">the line</span>
+      </div>
+      <div class="header-right">
+        <span class="pulse"></span>BUILDING YOUR HUD
+      </div>
+    </header>
+
+    <section class="main">
+      <div class="chunk-box" aria-label="Chunk mascot — working hard">
+        <div class="chunk-anchor" id="chunk-anchor">
+          <svg viewBox="0 0 140 140" aria-hidden="true">
+            <use id="chunk-use" href="/assets/theater/chunk.svg#chunk-working-pink"/>
+          </svg>
+        </div>
+        <div class="chunk-label">CHUNK · <b id="chunk-mood-label">working</b></div>
+      </div>
+
+      <div class="term" aria-label="Live build monitor">
+        <div class="term-bar">
+          <div class="dots"><i></i><i></i><i></i></div>
+          <div class="title">build · candyfactory.line</div>
+          <div class="right">LIVE</div>
+        </div>
+        <div class="term-body" id="term-body" role="log" aria-live="polite">
+          <div class="term-line info"><span class="ts">--:--:--</span><span class="glyph">▸</span>standing by · waiting for the line to fire up</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="progress">
+      <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="bar">
+        <div class="bar-fill pink" id="bar-fill"></div>
+        <div class="bar-pct" id="bar-pct">0%</div>
+      </div>
+      <div class="caption" id="caption">
+        <span class="stage-num">Stage <b id="stage-n">0</b> of <b id="stage-total">6</b></span>
+        <span class="stage-text" id="stage-text">warming up the line</span>
+      </div>
+      <div class="error-card" id="error-card" role="alert">
+        <div class="label">SOMETHING SNAGGED</div>
+        <div class="msg" id="error-msg"></div>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <div class="left"><span class="dot"></span>powered by <b>CandyFactory</b> · the line</div>
+      <div class="right">+ <b>Bonfire</b> · build · ship · forget</div>
+    </footer>
+  </main>
+
+  <div class="fade-cover" id="fade-cover" aria-hidden="true"></div>
+
+  <script src="/assets/theater/theater.js" defer></script>
+</body>
+</html>

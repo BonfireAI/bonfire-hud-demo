@@ -1,0 +1,22 @@
+{
+  "name": "bonfire-hud-demo",
+  "version": "0.1.0",
+  "description": "Bonfire HUD demo template — a single Node script that ingests a point cloud, builds a Potree octree, and plays a brand-shell theater while the build happens.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node hud-demo.mjs"
+  },
+  "dependencies": {
+    "open": "^11.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BonfireAI/bonfire-hud-demo.git"
+  },
+  "author": "CandyFactory · powered by Bonfire",
+  "keywords": ["point-cloud", "potree", "hud", "demo", "bonfire", "candyfactory"]
+}

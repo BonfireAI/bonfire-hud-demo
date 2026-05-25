@@ -1,0 +1,288 @@
+/* ============================================================================
+   hud.css — re-skinnable HUD shell (chrome only).
+   White field · deep blue letterforms · electric-blue phosphorus halo.
+   Tokens are scoped in :root — retune per engagement and the shell follows.
+   ============================================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@100;400;700;900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+
+:root {
+  --hud-ink:        #003d80;   /* deep blue letterform */
+  --hud-ink-soft:   #5c7390;   /* spec-stamp / secondary */
+  --hud-body-ink:   #0a1f3a;   /* prose */
+  --hud-glow:       #0096ff;   /* electric-blue halo */
+  --hud-rule:       #c2d4ee;   /* hairline navy rule */
+  --hud-bg:         #ffffff;
+  --hud-bg-soft:    #eef3fa;
+  --display:        'Big Shoulders Display', 'Saira', sans-serif;
+  --body:           'Inter', 'IBM Plex Sans', system-ui, sans-serif;
+  --mono:           'IBM Plex Mono', ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  background: var(--hud-bg);
+  color: var(--hud-body-ink);
+  font-family: var(--body);
+  overflow: hidden;
+}
+
+body {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0, 150, 255, 0.06) 0%, transparent 60%),
+    var(--hud-bg);
+}
+
+/* ============================================================================
+   STAGE — fills viewport
+   ============================================================================ */
+.stage {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: 22px 28px;
+  gap: 14px;
+}
+
+/* ============================================================================
+   HEADER — wordmark top-left + small chrome top-right
+   ============================================================================ */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--hud-rule);
+}
+.wordmark-wrap {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.wordmark-wrap svg {
+  display: block;
+  height: 64px;
+  width: 274px;        /* 600:140 aspect → 274:64, keeps the spec stamps visible */
+  overflow: visible;   /* don't clip the phosphorus halo */
+}
+.wordmark-spec {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: var(--hud-ink-soft);
+  text-transform: uppercase;
+}
+.chrome-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--hud-ink-soft);
+}
+.chrome-right .pill {
+  border: 1px solid var(--hud-rule);
+  border-radius: 999px;
+  padding: 4px 10px;
+  color: var(--hud-ink);
+  background: var(--hud-bg);
+}
+.chrome-btn {
+  width: 28px; height: 28px;
+  border: 1px solid var(--hud-rule);
+  border-radius: 4px;
+  background: var(--hud-bg);
+  color: var(--hud-ink);
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.chrome-btn:hover {
+  border-color: var(--hud-glow);
+  box-shadow: 0 0 0 2px rgba(0, 150, 255, 0.18);
+}
+
+/* ============================================================================
+   MAIN — potree mount area + TODO card
+   ============================================================================ */
+.main {
+  position: relative;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 14px;
+  min-height: 0;
+}
+
+#potree_render_area {
+  position: relative;
+  background:
+    linear-gradient(180deg, #f3f7fc 0%, #ffffff 100%);
+  border: 1px solid var(--hud-rule);
+  border-radius: 6px;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Empty-state — hud.js paints its own "potree not loaded" notice into
+   #potree_render_area when vendor libs are absent; otherwise the Potree
+   viewer canvas fills the box. No CSS placeholder here on purpose, to avoid
+   stacking two messages. */
+
+/* ── Re-skin card — points the new engineer at the right surface ── */
+.todo-card {
+  background: var(--hud-bg-soft);
+  border: 1px solid var(--hud-glow);
+  border-left: 4px solid var(--hud-glow);
+  border-radius: 6px;
+  padding: 14px 18px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 16px;
+  box-shadow:
+    0 0 0 1px rgba(0, 150, 255, 0.08),
+    0 1px 4px rgba(0, 61, 128, 0.06);
+}
+.todo-card .badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--hud-bg);
+  background: var(--hud-ink);
+  padding: 4px 10px;
+  border-radius: 3px;
+  white-space: nowrap;
+  align-self: center;
+}
+.todo-card .body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.todo-card .title {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 18px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--hud-ink);
+  text-shadow: 0 0 4px rgba(0, 150, 255, 0.3);
+}
+.todo-card .desc {
+  font-family: var(--body);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--hud-body-ink);
+}
+.todo-card .desc code {
+  font-family: var(--mono);
+  font-size: 12px;
+  background: var(--hud-bg);
+  border: 1px solid var(--hud-rule);
+  border-radius: 3px;
+  padding: 1px 5px;
+  color: var(--hud-ink);
+}
+
+/* ============================================================================
+   WATERMARK — bottom-right dual CandyFactory + Bonfire mark.
+   Both names visible. ~32px tall, 60% opacity.
+   Side-by-side composition with hairline divider. Keep on shipped engagements.
+   ============================================================================ */
+.watermark {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--hud-rule);
+  border-radius: 999px;
+  text-decoration: none;
+  opacity: 0.6;
+  transition: opacity 160ms ease-out, box-shadow 160ms ease-out;
+  font-family: 'Fredoka', 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: -0.005em;
+  line-height: 1;
+  height: 32px;
+  color: var(--hud-body-ink);
+}
+.watermark:hover {
+  opacity: 1;
+  box-shadow: 0 2px 10px rgba(0, 61, 128, 0.18);
+}
+.watermark .cf-candy   { color: #ff3b6b; }
+.watermark .cf-factory { color: #a96bff; }
+.watermark .divider {
+  width: 1px;
+  height: 14px;
+  background: var(--hud-rule);
+}
+.watermark .bonfire-pre {
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--hud-ink-soft);
+}
+.watermark .bonfire {
+  font-family: 'Big Shoulders Display', 'Saira', sans-serif;
+  font-weight: 900;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--hud-ink);
+}
+.watermark .ember {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff6a00;
+  box-shadow: 0 0 6px rgba(255, 106, 0, 0.6);
+  display: inline-block;
+}
+
+/* ============================================================================
+   FOOTER STRIP — discreet
+   ============================================================================ */
+.foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid var(--hud-rule);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--hud-ink-soft);
+}
+.foot b { color: var(--hud-ink); font-weight: 600; }
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+@media (max-width: 900px) {
+  .stage { padding: 16px 18px; }
+  .wordmark-wrap svg { height: 42px; }
+  .chrome-right .pill { display: none; }
+}

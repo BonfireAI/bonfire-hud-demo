@@ -1,0 +1,11 @@
+node_modules/
+package-lock.json
+.DS_Store
+.idea/
+.vscode/
+
+# CWD artifact — script auto-creates ./input/ on first run
+/input/
+
+# Auto-downloaded vendor libs (Potree release ~95 MB)
+assets/vendor/potree/
