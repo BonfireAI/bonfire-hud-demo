@@ -1,7 +1,7 @@
 /* ============================================================================
-   hud.css — re-skinnable HUD shell (chrome only).
+   hud.css — NAPS Vault HUD skin · Manitou site.
    White field · deep blue letterforms · electric-blue phosphorus halo.
-   Tokens are scoped in :root — retune per engagement and the shell follows.
+   Tokens scoped in :root — retune per engagement and the shell follows.
    ============================================================================ */
 
 @import url("https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@100;400;700;900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
@@ -12,11 +12,18 @@
   --hud-body-ink:   #0a1f3a;   /* prose */
   --hud-glow:       #0096ff;   /* electric-blue halo */
   --hud-rule:       #c2d4ee;   /* hairline navy rule */
+  --hud-rule-soft:  #e3ecf7;
   --hud-bg:         #ffffff;
   --hud-bg-soft:    #eef3fa;
+  --hud-bg-card:    #ffffff;
+  --hud-green:      #1aa863;
+  --hud-amber:      #e6a300;
+  --hud-red:        #d63a3a;
   --display:        'Big Shoulders Display', 'Saira', sans-serif;
   --body:           'Inter', 'IBM Plex Sans', system-ui, sans-serif;
   --mono:           'IBM Plex Mono', ui-monospace, monospace;
+  --rack-w:         340px;
+  --shadow-card:    0 1px 2px rgba(0, 61, 128, 0.06), 0 0 0 1px rgba(0, 61, 128, 0.03);
 }
 
 * { box-sizing: border-box; }
@@ -30,15 +37,16 @@ html, body {
   font-family: var(--body);
   overflow: hidden;
 }
-
 body {
   background:
     radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0, 150, 255, 0.06) 0%, transparent 60%),
     var(--hud-bg);
 }
 
+.mono { font-family: var(--mono); }
+
 /* ============================================================================
-   STAGE — fills viewport
+   STAGE — fills viewport, grid: header / main / footer
    ============================================================================ */
 .stage {
   position: relative;
@@ -46,56 +54,61 @@ body {
   width: 100vw;
   display: grid;
   grid-template-rows: auto 1fr auto;
-  padding: 22px 28px;
-  gap: 14px;
+  padding: 18px 22px;
+  gap: 12px;
 }
 
 /* ============================================================================
-   HEADER — wordmark top-left + small chrome top-right
+   HEADER
    ============================================================================ */
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  padding-bottom: 14px;
+  padding-bottom: 12px;
   border-bottom: 1px solid var(--hud-rule);
 }
-.wordmark-wrap {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
+.wordmark-wrap { display: flex; align-items: center; gap: 18px; }
 .wordmark-wrap svg {
   display: block;
-  height: 64px;
-  width: 274px;        /* 600:140 aspect → 274:64, keeps the spec stamps visible */
-  overflow: visible;   /* don't clip the phosphorus halo */
-}
-.wordmark-spec {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.24em;
-  color: var(--hud-ink-soft);
-  text-transform: uppercase;
+  height: 60px;
+  width: 257px;
+  overflow: visible;
 }
 .chrome-right {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
   font-family: var(--mono);
   font-size: 10px;
-  letter-spacing: 0.24em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--hud-ink-soft);
 }
-.chrome-right .pill {
+.pill {
   border: 1px solid var(--hud-rule);
   border-radius: 999px;
   padding: 4px 10px;
   color: var(--hud-ink);
   background: var(--hud-bg);
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
+.pill-live .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--hud-glow);
+  box-shadow: 0 0 6px rgba(0, 150, 255, 0.7);
+  animation: livepulse 1.8s ease-in-out infinite;
+}
+@keyframes livepulse {
+  0%, 100% { opacity: 0.5; box-shadow: 0 0 4px rgba(0, 150, 255, 0.5); }
+  50%      { opacity: 1;   box-shadow: 0 0 10px rgba(0, 150, 255, 1); }
+}
+.pill-time { font-variant-numeric: tabular-nums; min-width: 92px; justify-content: center; }
 .chrome-btn {
   width: 28px; height: 28px;
   border: 1px solid var(--hud-rule);
@@ -107,6 +120,7 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transition: border-color 140ms ease, box-shadow 140ms ease;
 }
 .chrome-btn:hover {
   border-color: var(--hud-glow);
@@ -114,93 +128,461 @@ body {
 }
 
 /* ============================================================================
-   MAIN — potree mount area + TODO card
+   MAIN — viewport + rack
    ============================================================================ */
 .main {
   position: relative;
   display: grid;
-  grid-template-rows: 1fr auto;
-  gap: 14px;
+  grid-template-columns: 1fr var(--rack-w);
+  gap: 12px;
   min-height: 0;
 }
 
-#potree_render_area {
+.viewport {
   position: relative;
-  background:
-    linear-gradient(180deg, #f3f7fc 0%, #ffffff 100%);
+  min-height: 0;
   border: 1px solid var(--hud-rule);
   border-radius: 6px;
   overflow: hidden;
+  background: linear-gradient(180deg, #f3f7fc 0%, #ffffff 100%);
+}
+
+#potree_render_area {
+  position: absolute;
+  inset: 0;
   min-height: 0;
 }
 
-/* Empty-state — hud.js paints its own "potree not loaded" notice into
-   #potree_render_area when vendor libs are absent; otherwise the Potree
-   viewer canvas fills the box. No CSS placeholder here on purpose, to avoid
-   stacking two messages. */
-
-/* ── Re-skin card — points the new engineer at the right surface ── */
-.todo-card {
-  background: var(--hud-bg-soft);
+/* Cockpit-frame corner ticks — precision-industrial cue */
+.cockpit-frame { position: absolute; inset: 0; pointer-events: none; }
+.cockpit-frame .tick {
+  position: absolute;
+  width: 14px; height: 14px;
   border: 1px solid var(--hud-glow);
-  border-left: 4px solid var(--hud-glow);
-  border-radius: 6px;
-  padding: 14px 18px;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: start;
-  gap: 16px;
+  opacity: 0.55;
+}
+.cockpit-frame .tick-tl { top: 10px;    left: 10px;    border-right: 0; border-bottom: 0; }
+.cockpit-frame .tick-tr { top: 10px;    right: 10px;   border-left:  0; border-bottom: 0; }
+.cockpit-frame .tick-bl { bottom: 10px; left: 10px;    border-right: 0; border-top:    0; }
+.cockpit-frame .tick-br { bottom: 10px; right: 10px;   border-left:  0; border-top:    0; }
+
+/* ============================================================================
+   STATION MARKERS (HTML overlay, world-projected by JS each frame)
+   ============================================================================ */
+.station-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 4;
+}
+.station-marker {
+  position: absolute;
+  width: 28px; height: 28px;
+  margin-left: -14px;
+  margin-top:  -14px;
+  border-radius: 50%;
+  background: var(--hud-glow);
+  border: 2px solid #ffffff;
   box-shadow:
-    0 0 0 1px rgba(0, 150, 255, 0.08),
-    0 1px 4px rgba(0, 61, 128, 0.06);
-}
-.todo-card .badge {
+    0 0 0 1px var(--hud-ink),
+    0 0 10px rgba(0, 150, 255, 0.55);
+  color: #ffffff;
   font-family: var(--mono);
-  font-size: 10px;
   font-weight: 600;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--hud-bg);
-  background: var(--hud-ink);
-  padding: 4px 10px;
-  border-radius: 3px;
-  white-space: nowrap;
-  align-self: center;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  pointer-events: auto;
+  user-select: none;
+  transition: transform 140ms ease, box-shadow 140ms ease;
 }
-.todo-card .body {
+.station-marker::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border: 1px solid rgba(0, 150, 255, 0.35);
+  border-radius: 50%;
+  animation: marker-ring 2.4s ease-out infinite;
+}
+@keyframes marker-ring {
+  0%   { transform: scale(0.6); opacity: 0.7; }
+  100% { transform: scale(1.4); opacity: 0;   }
+}
+.station-marker:hover {
+  transform: scale(1.18);
+  box-shadow:
+    0 0 0 1px var(--hud-ink),
+    0 0 18px rgba(0, 150, 255, 0.9);
+}
+.station-marker.is-active {
+  background: #ffffff;
+  color: var(--hud-ink);
+  border-color: var(--hud-glow);
+  box-shadow:
+    0 0 0 2px var(--hud-glow),
+    0 0 18px rgba(0, 150, 255, 0.9);
+}
+
+.station-tooltip {
+  position: fixed;
+  z-index: 60;
+  background: var(--hud-bg);
+  border: 1px solid var(--hud-glow);
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--hud-ink);
+  box-shadow: 0 4px 14px rgba(0, 61, 128, 0.2);
+  pointer-events: none;
+  white-space: nowrap;
+  transform: translate(10px, -50%);
+}
+.station-tooltip .name { font-weight: 600; }
+.station-tooltip .pts  { color: var(--hud-ink-soft); margin-left: 6px; }
+
+/* ============================================================================
+   TOUR BAR (floating, bottom-center of viewport)
+   ============================================================================ */
+.tour-bar {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid var(--hud-glow);
+  border-radius: 999px;
+  box-shadow: 0 4px 18px rgba(0, 61, 128, 0.12), 0 0 0 1px rgba(0, 150, 255, 0.18);
+  backdrop-filter: blur(4px);
+}
+.tour-btn {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--hud-rule);
+  background: var(--hud-bg);
+  color: var(--hud-ink);
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 140ms ease, box-shadow 140ms ease, transform 140ms ease;
+}
+.tour-btn:hover {
+  border-color: var(--hud-glow);
+  box-shadow: 0 0 0 2px rgba(0, 150, 255, 0.22);
+}
+.tour-btn:active { transform: scale(0.94); }
+.tour-btn-play {
+  border-color: var(--hud-glow);
+  color: var(--hud-bg);
+  background: var(--hud-glow);
+  width: 36px; height: 36px;
+  box-shadow: 0 0 12px rgba(0, 150, 255, 0.6);
+}
+.tour-btn-play:hover {
+  background: var(--hud-ink);
+  border-color: var(--hud-ink);
+}
+.tour-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding-left: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--hud-ink);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+.tour-meta .tour-label { color: var(--hud-ink-soft); font-size: 9px; letter-spacing: 0.24em; text-transform: uppercase; }
+.tour-meta .tour-value { font-weight: 600; }
+.tour-meta .tour-sep   { color: var(--hud-rule); }
+.tour-meta .tour-name  { font-weight: 500; }
+.tour-meta .tour-pts   { color: var(--hud-ink-soft); }
+
+/* ============================================================================
+   WIDGET RACK — right column, vertically scrolling
+   ============================================================================ */
+.rack {
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 10px;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--hud-rule) transparent;
 }
-.todo-card .title {
+.rack::-webkit-scrollbar { width: 8px; }
+.rack::-webkit-scrollbar-thumb { background: var(--hud-rule); border-radius: 4px; }
+
+/* shared card */
+.card {
+  background: var(--hud-bg-card);
+  border: 1px solid var(--hud-rule);
+  border-radius: 6px;
+  padding: 12px 14px;
+  box-shadow: var(--shadow-card);
+}
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--hud-rule-soft);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--hud-ink-soft);
+}
+.card-tag { color: var(--hud-ink); font-weight: 600; }
+.card-meta { color: var(--hud-ink-soft); display: inline-flex; align-items: center; gap: 5px; }
+.card-meta.status-ok { color: var(--hud-green); font-weight: 600; }
+
+/* dot helpers */
+.dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; }
+.dot-live {
+  background: var(--hud-red);
+  box-shadow: 0 0 6px rgba(214, 58, 58, 0.7);
+  animation: livepulse-red 1.4s ease-in-out infinite;
+}
+@keyframes livepulse-red {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 1;    }
+}
+
+/* ─── card-asset ─────────────────────────────────────────────────────── */
+.asset-title {
+  margin: 0;
   font-family: var(--display);
   font-weight: 900;
-  font-size: 18px;
+  font-size: 22px;
+  line-height: 1.05;
   letter-spacing: 0.02em;
   text-transform: uppercase;
   color: var(--hud-ink);
-  text-shadow: 0 0 4px rgba(0, 150, 255, 0.3);
+  text-shadow: 0 0 4px rgba(0, 150, 255, 0.25);
 }
-.todo-card .desc {
-  font-family: var(--body);
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--hud-body-ink);
+.asset-id {
+  margin-top: 4px;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 11px;
 }
-.todo-card .desc code {
+.asset-grid {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 14px;
+}
+.asset-grid > div { display: flex; flex-direction: column; gap: 2px; }
+.kv-k {
   font-family: var(--mono);
-  font-size: 12px;
-  background: var(--hud-bg);
-  border: 1px solid var(--hud-rule);
-  border-radius: 3px;
-  padding: 1px 5px;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--hud-ink-soft);
+}
+.kv-v {
+  font-size: 13px;
   color: var(--hud-ink);
+  font-weight: 500;
+}
+
+/* ─── card-gauges ────────────────────────────────────────────────────── */
+.gauge-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.gauge { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.gauge-svg { width: 100%; height: auto; max-width: 150px; display: block; }
+.needle-group {
+  transform-origin: 100px 110px;
+  transform: rotate(-45deg);
+  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.gauge-readout {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  color: var(--hud-ink);
+}
+.gauge-value { font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.gauge-unit  { font-family: var(--mono); font-size: 11px; color: var(--hud-ink-soft); }
+.gauge-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--hud-ink-soft);
+}
+
+/* ─── card-inspection ────────────────────────────────────────────────── */
+.form-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 4px 0;
+  gap: 12px;
+  font-size: 12px;
+  border-bottom: 1px dashed var(--hud-rule-soft);
+}
+.form-row:last-of-type { border-bottom: 0; }
+.form-k {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--hud-ink-soft);
+}
+.form-v { color: var(--hud-ink); }
+.form-due { color: var(--hud-ink-soft); margin-left: 4px; }
+.form-label {
+  display: block;
+  margin: 10px 0 4px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--hud-ink-soft);
+}
+.form-note {
+  width: 100%;
+  border: 1px solid var(--hud-rule);
+  border-radius: 4px;
+  padding: 8px 10px;
+  font-family: var(--body);
+  font-size: 12px;
+  color: var(--hud-body-ink);
+  background: var(--hud-bg-soft);
+  resize: vertical;
+  min-height: 60px;
+  outline: none;
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+.form-note:focus {
+  border-color: var(--hud-glow);
+  box-shadow: 0 0 0 2px rgba(0, 150, 255, 0.18);
+  background: var(--hud-bg);
+}
+
+/* ─── card-actions ───────────────────────────────────────────────────── */
+.action-stack {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+.action-btn {
+  border: 1px solid var(--hud-glow);
+  background: var(--hud-bg);
+  color: var(--hud-glow);
+  padding: 9px 12px;
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  cursor: pointer;
+  transition: background 140ms ease, color 140ms ease, box-shadow 140ms ease;
+}
+.action-btn:hover {
+  background: var(--hud-glow);
+  color: var(--hud-bg);
+  box-shadow: 0 0 14px rgba(0, 150, 255, 0.55);
+}
+.action-btn-warn {
+  border-color: var(--hud-red);
+  color: var(--hud-red);
+}
+.action-btn-warn:hover {
+  background: var(--hud-red);
+  color: var(--hud-bg);
+  box-shadow: 0 0 14px rgba(214, 58, 58, 0.5);
+}
+
+/* ─── card-log ───────────────────────────────────────────────────────── */
+.event-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.event {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: baseline;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 12px;
+  color: var(--hud-body-ink);
+  border-bottom: 1px dashed var(--hud-rule-soft);
+}
+.event:last-child { border-bottom: 0; }
+.event .sev {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  margin-top: 4px;
+}
+.event .sev-green { background: var(--hud-green); box-shadow: 0 0 4px rgba(26, 168, 99, 0.5); }
+.event .sev-amber { background: var(--hud-amber); box-shadow: 0 0 4px rgba(230, 163, 0, 0.5); }
+.event .sev-red   { background: var(--hud-red);   box-shadow: 0 0 4px rgba(214, 58, 58, 0.5); }
+.event .t { font-size: 10px; color: var(--hud-ink-soft); }
+.event .m { color: var(--hud-body-ink); }
+.event-new {
+  animation: event-pulse 2.4s ease-in-out 3;
+  border-radius: 3px;
+}
+@keyframes event-pulse {
+  0%, 100% { background: transparent; }
+  50%      { background: rgba(0, 150, 255, 0.07); }
+}
+
+/* ─── card-training ──────────────────────────────────────────────────── */
+.video-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--hud-rule);
+  border-radius: 4px;
+  overflow: hidden;
+  background: #000;
+}
+.video-wrap iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.video-note {
+  margin: 8px 0 0;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--hud-ink-soft);
+  line-height: 1.4;
 }
 
 /* ============================================================================
-   WATERMARK — bottom-right dual CandyFactory + Bonfire mark.
-   Both names visible. ~32px tall, 60% opacity.
-   Side-by-side composition with hairline divider. Keep on shipped engagements.
+   WATERMARK
    ============================================================================ */
 .watermark {
   position: fixed;
@@ -262,7 +644,7 @@ body {
 }
 
 /* ============================================================================
-   FOOTER STRIP — discreet
+   FOOTER STRIP
    ============================================================================ */
 .foot {
   display: flex;
@@ -272,7 +654,7 @@ body {
   border-top: 1px solid var(--hud-rule);
   font-family: var(--mono);
   font-size: 10px;
-  letter-spacing: 0.24em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--hud-ink-soft);
 }
@@ -281,8 +663,176 @@ body {
 /* ============================================================================
    RESPONSIVE
    ============================================================================ */
+@media (max-width: 1100px) {
+  :root { --rack-w: 300px; }
+}
 @media (max-width: 900px) {
-  .stage { padding: 16px 18px; }
-  .wordmark-wrap svg { height: 42px; }
-  .chrome-right .pill { display: none; }
+  .stage { padding: 14px 14px; }
+  .wordmark-wrap svg { height: 42px; width: 180px; }
+  .chrome-right .pill-time { display: none; }
+  .main { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
+  .rack {
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-height: 220px;
+  }
+  .rack .card { min-width: 260px; flex: 0 0 auto; }
+}
+
+/* ====================================================================
+   NODES INDEX — scrollable component list in the right rack.
+   Click a row to walk the tour to that node. The list is populated by
+   hud.js renderNodesIndex() from components.json.
+   CUSTOMIZE: row layout = grid (dot | idx | name | loc); restyle here.
+   ==================================================================== */
+.nodes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 260px;
+  overflow-y: auto;
+  padding-right: 4px;
+  margin: 0;
+}
+.nodes-list::-webkit-scrollbar { width: 6px; }
+.nodes-list::-webkit-scrollbar-thumb {
+  background: var(--hud-rule);
+  border-radius: 3px;
+}
+.node-row {
+  display: grid;
+  grid-template-columns: 12px 22px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background: var(--hud-bg);
+  border: 1px solid var(--hud-rule);
+  border-radius: 3px;
+  font-family: var(--body);
+  font-size: 11px;
+  color: var(--hud-body-ink);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 120ms ease-out, background 120ms ease-out, transform 120ms ease-out;
+}
+.node-row:hover {
+  border-color: var(--hud-glow);
+  background: rgba(0, 150, 255, 0.04);
+}
+.node-row.is-active {
+  border-color: var(--hud-ink);
+  background: rgba(0, 61, 128, 0.06);
+  transform: translateX(2px);
+  box-shadow: -2px 0 0 var(--hud-glow);
+}
+.node-row .node-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  justify-self: center;
+}
+.node-row.tag-green .node-dot { background: var(--hud-green); box-shadow: 0 0 4px rgba(26, 168, 99, 0.55); }
+.node-row.tag-amber .node-dot { background: var(--hud-amber); box-shadow: 0 0 4px rgba(230, 163, 0, 0.55); }
+.node-row.tag-red   .node-dot { background: var(--hud-red);   box-shadow: 0 0 4px rgba(214, 58, 58, 0.55); }
+.node-row .node-idx {
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--hud-ink-soft);
+}
+.node-row .node-name {
+  font-weight: 600;
+  font-size: 11px;
+  color: var(--hud-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.node-row .node-loc {
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  color: var(--hud-ink-soft);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ─── Marker tag-color variants ───────────────────────────────────────
+   Overrides the default electric-blue marker chrome based on tag_color
+   in components.json. CUSTOMIZE: change the bg colors or add new tag classes. */
+.station-marker.tag-amber {
+  background: rgba(230, 163, 0, 0.95) !important;
+  box-shadow: 0 0 10px rgba(230, 163, 0, 0.45);
+}
+.station-marker.tag-red {
+  background: rgba(214, 58, 58, 0.95) !important;
+  box-shadow: 0 0 10px rgba(214, 58, 58, 0.55);
+}
+/* .station-marker.tag-green — default electric blue inherited */
+
+/* ====================================================================
+   EQUIPMENT VIEW imagery card — per-component panoramic placeholder.
+   The <img> src is swapped per stop by hud.js applyComponentContext().
+   Default uses Lorem Picsum (deterministic per component.id) so the
+   demo reads as "scanner imagery" without bundling photos.
+   CUSTOMIZE: replace with /assets/hud/panoramas/{id}.jpg for real captures.
+   ==================================================================== */
+.imagery-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--hud-rule);
+  border-radius: 4px;
+  overflow: hidden;
+  background: #0a1f3a;
+}
+.imagery-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0.88;
+  filter: contrast(1.05) saturate(0.85);
+}
+.imagery-wrap::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 55%, rgba(0, 61, 128, 0.5) 100%);
+  pointer-events: none;
+}
+.imagery-wrap::before {
+  /* corner tick marks · scanner-frame feel */
+  content: '';
+  position: absolute; inset: 6px;
+  pointer-events: none;
+  background:
+    linear-gradient(#0096ff, #0096ff) top    left   / 10px 1px no-repeat,
+    linear-gradient(#0096ff, #0096ff) top    left   / 1px 10px no-repeat,
+    linear-gradient(#0096ff, #0096ff) top    right  / 10px 1px no-repeat,
+    linear-gradient(#0096ff, #0096ff) top    right  / 1px 10px no-repeat,
+    linear-gradient(#0096ff, #0096ff) bottom left   / 10px 1px no-repeat,
+    linear-gradient(#0096ff, #0096ff) bottom left   / 1px 10px no-repeat,
+    linear-gradient(#0096ff, #0096ff) bottom right  / 10px 1px no-repeat,
+    linear-gradient(#0096ff, #0096ff) bottom right  / 1px 10px no-repeat;
+  opacity: 0.65;
+}
+.imagery-caption {
+  position: absolute;
+  left: 10px;
+  bottom: 8px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+  z-index: 1;
+}
+.imagery-note {
+  margin: 6px 0 0;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--hud-ink-soft);
+  line-height: 1.4;
 }

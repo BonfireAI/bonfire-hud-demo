@@ -882,18 +882,19 @@ async function runPotreeConverter(bus, { binPath, e57Path }) {
             name: 'convert', current: Number(pct[1]), total: 100, unit: 'percent',
           });
         }
-        if (isTTY) console.log(`  ${paint('ink', line)}`);
+        console.log(`  ${paint('ink', line)}`);
       }
     };
     child.stdout.on('data', (b) => stream(b, 'info'));
     child.stderr.on('data', (b) => stream(b, 'warn'));
     child.on('error', reject);
-    child.on('exit', (code) => {
+    child.on('exit', (code, signal) => {
       if (code === 0) {
         bus.emit('log', { level: 'success', text: 'conversion complete' });
         resolve({ tail });
       } else {
-        const err = new Error(`PotreeConverter exited with code ${code}`);
+        const sigInfo = signal ? ` (signal: ${signal})` : '';
+        const err = new Error(`PotreeConverter exited with code ${code}${sigInfo}`);
         err.tail = tail;
         reject(err);
       }

@@ -1,0 +1,338 @@
+{
+  "version": "v0.1",
+  "source_cloud": "Trimble_StSulpice-Cloud-50mm.e57",
+  "note": "Fixture: fake industrial components scattered through the church cloud. Replace per engagement.",
+  "count": 15,
+  "components": [
+    {
+      "id": "BLR-04",
+      "name": "BOILER B-04",
+      "type": "BOILER",
+      "location": "NAVE NORTH",
+      "manufacturer": "VAILLANT",
+      "tag_color": "red",
+      "index": 0,
+      "pos_norm": {
+        "x": 0.19815686274509806,
+        "y": 0.7546274509803921,
+        "z": 0.3743137254901961
+      },
+      "metrics": {
+        "temp_nominal": 87,
+        "pressure_nominal": 155,
+        "vibration_mmps": 0.6,
+        "run_hours": 2500,
+        "commissioned": "2015-01-01",
+        "last_inspection": "2026-01-01"
+      }
+    },
+    {
+      "id": "PMP-A3",
+      "name": "PUMP A-3",
+      "type": "PUMP",
+      "location": "CRYPT",
+      "manufacturer": "GRUNDFOS",
+      "tag_color": "amber",
+      "index": 1,
+      "pos_norm": {
+        "x": 0.5994901960784313,
+        "y": 0.6635686274509804,
+        "z": 0.1996078431372549
+      },
+      "metrics": {
+        "temp_nominal": 64,
+        "pressure_nominal": 198,
+        "vibration_mmps": 3.2,
+        "run_hours": 3873,
+        "commissioned": "2016-08-14",
+        "last_inspection": "2026-06-12"
+      }
+    },
+    {
+      "id": "VLV-22",
+      "name": "STEAM VALVE V-22",
+      "type": "VALVE",
+      "location": "CHAPEL EAST",
+      "manufacturer": "EMERSON",
+      "tag_color": "green",
+      "index": 2,
+      "pos_norm": {
+        "x": 0.19141176470588234,
+        "y": 0.41400000000000003,
+        "z": 0.367843137254902
+      },
+      "metrics": {
+        "temp_nominal": 52,
+        "pressure_nominal": 146,
+        "vibration_mmps": 0.7,
+        "run_hours": 5246,
+        "commissioned": "2017-03-27",
+        "last_inspection": "2026-05-23"
+      }
+    },
+    {
+      "id": "SNS-T12",
+      "name": "PRESSURE SENSOR T-12",
+      "type": "SENSOR",
+      "location": "TRANSEPT N",
+      "manufacturer": "SIEMENS",
+      "tag_color": "green",
+      "index": 3,
+      "pos_norm": {
+        "x": 0.5725098039215686,
+        "y": 0.7310196078431372,
+        "z": 0.17588235294117646
+      },
+      "metrics": {
+        "temp_nominal": 59,
+        "pressure_nominal": 104,
+        "vibration_mmps": 1.1,
+        "run_hours": 6619,
+        "commissioned": "2018-10-12",
+        "last_inspection": "2026-04-06"
+      }
+    },
+    {
+      "id": "HX-01",
+      "name": "HEAT EXCHANGER HX-1",
+      "type": "HEAT_EXCHANGER",
+      "location": "NAVE CENTER",
+      "manufacturer": "ALFA LAVAL",
+      "tag_color": "green",
+      "index": 4,
+      "pos_norm": {
+        "x": 0.23525490196078433,
+        "y": 0.5893725490196078,
+        "z": 0.3462745098039216
+      },
+      "metrics": {
+        "temp_nominal": 54,
+        "pressure_nominal": 97,
+        "vibration_mmps": 0.8,
+        "run_hours": 7992,
+        "commissioned": "2019-05-25",
+        "last_inspection": "2026-03-17"
+      }
+    },
+    {
+      "id": "CMP-07",
+      "name": "AIR COMPRESSOR C-07",
+      "type": "COMPRESSOR",
+      "location": "UNDERCROFT",
+      "manufacturer": "ATLAS COPCO",
+      "tag_color": "amber",
+      "index": 5,
+      "pos_norm": {
+        "x": 0.4983137254901961,
+        "y": 0.8085882352941176,
+        "z": 0.3462745098039216
+      },
+      "metrics": {
+        "temp_nominal": 74,
+        "pressure_nominal": 225,
+        "vibration_mmps": 4.7,
+        "run_hours": 9365,
+        "commissioned": "2020-12-10",
+        "last_inspection": "2026-02-28"
+      }
+    },
+    {
+      "id": "CHL-02",
+      "name": "CHILLER UNIT CU-02",
+      "type": "CHILLER",
+      "location": "CHAPEL WEST",
+      "manufacturer": "CARRIER",
+      "tag_color": "green",
+      "index": 6,
+      "pos_norm": {
+        "x": 0.4983137254901961,
+        "y": 0.7849803921568628,
+        "z": 0.6094117647058824
+      },
+      "metrics": {
+        "temp_nominal": 5,
+        "pressure_nominal": 113,
+        "vibration_mmps": 0.9,
+        "run_hours": 10738,
+        "commissioned": "2021-07-23",
+        "last_inspection": "2026-01-11"
+      }
+    },
+    {
+      "id": "MTR-15",
+      "name": "MAIN MOTOR M-15",
+      "type": "MOTOR",
+      "location": "NAVE SOUTH",
+      "manufacturer": "ABB",
+      "tag_color": "green",
+      "index": 7,
+      "pos_norm": {
+        "x": 0.3128235294117647,
+        "y": 0.8389411764705883,
+        "z": 0.5447058823529412
+      },
+      "metrics": {
+        "temp_nominal": 70,
+        "pressure_nominal": 106,
+        "vibration_mmps": 3.4,
+        "run_hours": 12111,
+        "commissioned": "2022-02-08",
+        "last_inspection": "2026-06-22"
+      }
+    },
+    {
+      "id": "FAN-08",
+      "name": "EXHAUST FAN F-08",
+      "type": "FAN",
+      "location": "BELL TOWER N",
+      "manufacturer": "GREENHECK",
+      "tag_color": "green",
+      "index": 8,
+      "pos_norm": {
+        "x": 0.646705882352941,
+        "y": 0.9165098039215687,
+        "z": 0.37
+      },
+      "metrics": {
+        "temp_nominal": 48,
+        "pressure_nominal": 99,
+        "vibration_mmps": 2.3,
+        "run_hours": 13484,
+        "commissioned": "2023-09-21",
+        "last_inspection": "2026-05-05"
+      }
+    },
+    {
+      "id": "WTK-03",
+      "name": "WATER TANK WT-3",
+      "type": "TANK",
+      "location": "BELL TOWER S",
+      "manufacturer": "A.O. SMITH",
+      "tag_color": "green",
+      "index": 9,
+      "pos_norm": {
+        "x": 0.5016862745098039,
+        "y": 0.7883529411764707,
+        "z": 0.16509803921568628
+      },
+      "metrics": {
+        "temp_nominal": 20,
+        "pressure_nominal": 112,
+        "vibration_mmps": 0.7,
+        "run_hours": 14857,
+        "commissioned": "2015-04-06",
+        "last_inspection": "2026-04-16"
+      }
+    },
+    {
+      "id": "MET-01",
+      "name": "FUEL METER FM-1",
+      "type": "METER",
+      "location": "NARTHEX",
+      "manufacturer": "ENDRESS",
+      "tag_color": "green",
+      "index": 10,
+      "pos_norm": {
+        "x": 0.5050588235294118,
+        "y": 0.21501960784313726,
+        "z": 0.2901960784313725
+      },
+      "metrics": {
+        "temp_nominal": 60,
+        "pressure_nominal": 115,
+        "vibration_mmps": 1.1,
+        "run_hours": 16230,
+        "commissioned": "2016-11-19",
+        "last_inspection": "2026-03-27"
+      }
+    },
+    {
+      "id": "ACT-09",
+      "name": "ACTUATOR ACT-09",
+      "type": "ACTUATOR",
+      "location": "APSE",
+      "manufacturer": "BELIMO",
+      "tag_color": "red",
+      "index": 11,
+      "pos_norm": {
+        "x": 0.3094509803921569,
+        "y": 0.7006666666666665,
+        "z": 0.18235294117647058
+      },
+      "metrics": {
+        "temp_nominal": 55,
+        "pressure_nominal": 108,
+        "vibration_mmps": 0.8,
+        "run_hours": 17603,
+        "commissioned": "2017-06-04",
+        "last_inspection": "2026-02-10"
+      }
+    },
+    {
+      "id": "CT-02",
+      "name": "CONDENSATE TRAP CT-2",
+      "type": "TRAP",
+      "location": "TRANSEPT S",
+      "manufacturer": "SPIRAX SARCO",
+      "tag_color": "green",
+      "index": 12,
+      "pos_norm": {
+        "x": 0.7512549019607844,
+        "y": 0.4949411764705883,
+        "z": 0.6676470588235295
+      },
+      "metrics": {
+        "temp_nominal": 50,
+        "pressure_nominal": 101,
+        "vibration_mmps": 1.2,
+        "run_hours": 18976,
+        "commissioned": "2018-01-17",
+        "last_inspection": "2026-01-21"
+      }
+    },
+    {
+      "id": "CP-MAIN",
+      "name": "CONTROL PANEL CP-MAIN",
+      "type": "PANEL",
+      "location": "SACRISTY",
+      "manufacturer": "ROCKWELL",
+      "tag_color": "green",
+      "index": 13,
+      "pos_norm": {
+        "x": 0.3465490196078432,
+        "y": 0.6332156862745097,
+        "z": 0.30745098039215685
+      },
+      "metrics": {
+        "temp_nominal": 57,
+        "pressure_nominal": 124,
+        "vibration_mmps": 0.9,
+        "run_hours": 20349,
+        "commissioned": "2019-08-02",
+        "last_inspection": "2026-06-04"
+      }
+    },
+    {
+      "id": "BRN-04",
+      "name": "BURNER BN-04",
+      "type": "BURNER",
+      "location": "CRYPT REAR",
+      "manufacturer": "WEISHAUPT",
+      "tag_color": "amber",
+      "index": 14,
+      "pos_norm": {
+        "x": 0.43086274509803923,
+        "y": 0.8827843137254903,
+        "z": 0.5490196078431373
+      },
+      "metrics": {
+        "temp_nominal": 52,
+        "pressure_nominal": 117,
+        "vibration_mmps": 0.6,
+        "run_hours": 3222,
+        "commissioned": "2020-03-15",
+        "last_inspection": "2026-05-15"
+      }
+    }
+  ]
+}
