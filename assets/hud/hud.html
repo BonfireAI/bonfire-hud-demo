@@ -4,37 +4,37 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <title>Bonfire HUD demo</title>
+  <title>NAPS Vault · Saint-Sulpice Interior</title>
   <link rel="stylesheet" href="/assets/hud/hud.css">
   <!--
-    The HUD shell is the CANDY — re-skin it per engagement.
-
-    What ships in this template is a deliberately generic chrome (white field +
-    deep-blue letterform + electric-blue phosphorus halo) wrapped around a
-    Potree mount point. Swap the wordmark, retune the palette, change the
-    typography, drop in a knowledge-graph overlay — whatever shape your
-    engagement asks for. The theater stays Cotton Candy Parlor (that's the
-    factory at work); the HUD becomes the brand of the work.
-
-    Potree vendor libs are loaded at the bottom of <body> in the order Potree
-    1.8.2's reference viewer expects. hud.js mounts the viewer and points it at
-    /octree/metadata.json (served by the CLI from the cache).
+    HUD shell — NAPS Vault skin · Saint-Sulpice interior dev sample.
+    White field · deep blue letterforms (#003d80) · electric-blue halo (#0096ff).
+    Big Shoulders Display headings · Inter body · IBM Plex Mono for structural text.
+    Re-skinnable per engagement; tokens live in :root in hud.css.
+    ─────────────────────────────────────────────────────────────────────────
+    QUICK CUSTOMIZATION MAP (this file):
+      • Wordmark text       → line ~46–48  (NAPS / vault tspans + spec stamps)
+      • Header status pill  → line ~57    (id="header-pill" — JS auto-updates from scan-stations.json)
+      • Asset summary card  → line ~96–115 (title, ID, scan date, scanner, point count)
+      • Gauges (temp/pres)  → line ~120–165 (data-min/data-max/data-amber/data-red attrs)
+      • Inspection form     → line ~170–185 (dates, operator, free-text note placeholder)
+      • Quick actions       → line ~190–198 (button labels)
+      • Event log entries   → line ~202–235 (severity dots: sev-green | sev-amber | sev-red)
+      • Training video      → line ~242–252 (iframe src — swap YouTube video ID)
+      • Footer text         → line ~258    (free-text)
+    Companion files:
+      • hud.css — visual tokens, ALL colors live in :root at line ~10
+      • hud.js  — gauge ranges, tour interval, station-metric formulas
+      • scan-stations.json — node markers + per-station data (10–20 nodes supported;
+        regenerate via: /tmp/e57-venv/bin/python3 [your-e57-to-json script])
   -->
 </head>
 <body>
   <main class="stage" id="stage">
+
     <header class="header">
-      <div class="wordmark-wrap" aria-label="HUD wordmark — re-skin per engagement">
-        <!--
-          Wordmark slot.
-            · YOUR  → Big Shoulders Display 900 Black, letter-spacing 0.02em
-            · HUD   → Big Shoulders Display 100 Thin, letter-spacing 0.08em
-            · ink   → deep blue #003d80
-            · halo  → electric blue #0096ff phosphorus glow (4px + 12px Gaussian)
-          Replace YOUR / HUD with your engagement's marks. The halo filter and
-          rule treatment are the re-skinnable bones.
-        -->
-        <svg viewBox="0 0 600 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="HUD wordmark">
+      <div class="wordmark-wrap" aria-label="NAPS vault wordmark">
+        <svg viewBox="0 0 600 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="NAPS vault wordmark">
           <defs>
             <filter id="nv-halo" x="-20%" y="-40%" width="140%" height="180%">
               <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="b1"/>
@@ -50,60 +50,269 @@
               </feMerge>
             </filter>
           </defs>
-          <!-- twin precision rules above + below -->
-          <line x1="40" y1="24"  x2="560" y2="24"  stroke="#003d80" stroke-width="1" opacity="0.6"/>
+          <line x1="40" y1="24"  x2="560" y2="24"  stroke="#003d80" stroke-width="1"   opacity="0.6"/>
           <line x1="40" y1="30"  x2="560" y2="30"  stroke="#003d80" stroke-width="0.5" opacity="0.3"/>
-          <line x1="40" y1="116" x2="560" y2="116" stroke="#003d80" stroke-width="1" opacity="0.6"/>
+          <line x1="40" y1="116" x2="560" y2="116" stroke="#003d80" stroke-width="1"   opacity="0.6"/>
           <line x1="40" y1="122" x2="560" y2="122" stroke="#003d80" stroke-width="0.5" opacity="0.3"/>
           <text x="300" y="96" text-anchor="middle"
                 font-family="'Big Shoulders Display', 'Saira', 'Inter', sans-serif"
                 font-size="68" fill="#003d80" filter="url(#nv-halo)">
-            <tspan font-weight="900" letter-spacing="0.02em">YOUR</tspan><tspan dx="18" font-weight="100" letter-spacing="0.08em">HUD</tspan>
+            <tspan font-weight="900" letter-spacing="0.02em">NAPS</tspan><tspan dx="18" font-weight="100" letter-spacing="0.08em">vault</tspan>
           </text>
-          <text x="40"  y="136" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="3" fill="#5c7390">RE-SKIN ME</text>
-          <text x="560" y="136" text-anchor="end" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="3" fill="#5c7390">HUD SHELL · v0</text>
+          <text x="40"  y="136" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="3" fill="#5c7390">BONFIRE HUD · v0.2</text>
+          <text x="560" y="136" text-anchor="end" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="3" fill="#5c7390">TRIMBLE TX8 · SAINT-SULPICE</text>
         </svg>
       </div>
       <div class="chrome-right" aria-label="HUD controls">
-        <span class="pill">scan loaded</span>
-        <button class="chrome-btn" type="button" aria-label="Settings" title="Settings">⚙</button>
+        <span class="pill pill-live" id="header-pill"><span class="dot"></span>5 SCAN STATIONS &middot; 8.48M PTS</span>
+        <span class="pill pill-time" id="clock">--:--:--</span>
+        <button class="chrome-btn" type="button" aria-label="Layers"  title="Layers">&#9783;</button>
+        <button class="chrome-btn" type="button" aria-label="Settings" title="Settings">&#9881;</button>
         <button class="chrome-btn" type="button" aria-label="Help"     title="Help">?</button>
       </div>
     </header>
 
     <section class="main">
-      <!--
-        Potree mount point. hud.js wires the viewer here. Empty by design — drop
-        your own panels, overlays, or knowledge-graph nodes around or on top of
-        this mount in the engagement skin.
-      -->
-      <div id="potree_render_area"></div>
 
-      <div class="todo-card" role="note">
-        <span class="badge">RE-SKIN HERE</span>
-        <div class="body">
-          <div class="title">THIS IS THE CANDY · MAKE IT YOURS</div>
-          <p class="desc">
-            The shell ships generic so it ships fast. Swap the
-            <code>YOUR|HUD</code> wordmark, retune the palette tokens in
-            <code>hud.css</code>, and drop your engagement's panels into this
-            <code>.main</code> section. The Potree mount above keeps working
-            untouched.
-          </p>
+      <!-- Potree mount + 3D overlays -->
+      <div class="viewport">
+        <div id="potree_render_area"></div>
+
+        <!-- Overlay layer for HTML markers projected onto the 3D scene -->
+        <div id="station-overlay" class="station-overlay" aria-hidden="false"></div>
+
+        <!-- Floating tour bar (bottom-center of the 3D viewport) -->
+        <div id="tour-bar" class="tour-bar" role="region" aria-label="Guided tour">
+          <button class="tour-btn" id="tour-prev" type="button" aria-label="Previous stop">&#9198;</button>
+          <button class="tour-btn tour-btn-play" id="tour-play" type="button" aria-label="Play tour">&#9654;</button>
+          <button class="tour-btn" id="tour-next" type="button" aria-label="Next stop">&#9197;</button>
+          <div class="tour-meta" id="tour-meta">
+            <span class="tour-label">STOP</span>
+            <span class="tour-value" id="tour-stop">1 / 5</span>
+            <span class="tour-sep">&middot;</span>
+            <span class="tour-name" id="tour-name">scan_0</span>
+            <span class="tour-pts" id="tour-pts">346,444 pts</span>
+          </div>
+        </div>
+
+        <!-- Crosshair + corner ticks for cockpit feel -->
+        <div class="cockpit-frame" aria-hidden="true">
+          <span class="tick tick-tl"></span>
+          <span class="tick tick-tr"></span>
+          <span class="tick tick-bl"></span>
+          <span class="tick tick-br"></span>
         </div>
       </div>
+
+      <!-- Right widget rack -->
+      <aside class="rack" aria-label="Operational widget rack">
+
+        <!-- 1. Asset summary -->
+        <section class="card card-asset">
+          <header class="card-head">
+            <span class="card-tag">ASSET</span>
+            <span class="card-meta" id="asset-station-tag">STATION 1 / 5</span>
+          </header>
+          <!-- CUSTOMIZE: title + ID + grid populated dynamically by hud.js
+               from the active component in components.json. Edit field labels
+               here; edit field IDs + ordering in applyComponentContext() in hud.js. -->
+          <h2 class="asset-title" id="asset-title">BOILER B-04</h2>
+          <div class="asset-id">
+            <span class="kv-k">ID</span><span class="kv-v mono" id="asset-id">NV-BLR-04</span>
+          </div>
+          <div class="asset-grid">
+            <div><span class="kv-k">COMMISSIONED</span><span class="kv-v mono" id="asset-commissioned">2015&#8209;01&#8209;01</span></div>
+            <div><span class="kv-k">RUN HRS</span><span class="kv-v mono" id="asset-runhrs">2,500&nbsp;h</span></div>
+            <div><span class="kv-k">MFR</span><span class="kv-v mono" id="asset-mfr">VAILLANT</span></div>
+            <div><span class="kv-k">LOCATION</span><span class="kv-v mono" id="asset-location">NAVE NORTH</span></div>
+          </div>
+        </section>
+
+        <!-- 1b. Equipment view — fake panorama per component (deterministic picsum
+             placeholder; swap iframe img src in hud.js applyComponentContext()
+             to point at real /assets/hud/panoramas/{id}.jpg per engagement). -->
+        <section class="card card-imagery">
+          <header class="card-head">
+            <span class="card-tag">EQUIPMENT&nbsp;VIEW</span>
+            <span class="card-meta mono" id="imagery-stamp">CAPTURED 2014&#8209;09&#8209;12</span>
+          </header>
+          <div class="imagery-wrap">
+            <img id="imagery-img"
+                 src="https://picsum.photos/seed/BLR-04/640/360?grayscale&amp;blur=1"
+                 alt="Equipment panorama (placeholder)"
+                 loading="lazy"
+                 referrerpolicy="no-referrer">
+            <div class="imagery-caption" id="imagery-caption">BOILER B-04 &middot; NAVE NORTH</div>
+          </div>
+          <p class="imagery-note">As-captured &middot; placeholder &middot; swap for real panorama per engagement.</p>
+        </section>
+
+        <!-- 1c. Nodes index — scrollable list of all components with click-to-jump
+             CUSTOMIZE: rows are generated by hud.js renderNodesIndex() from
+             components.json. Style the list in hud.css under .nodes-list / .node-row. -->
+        <section class="card card-nodes">
+          <header class="card-head">
+            <span class="card-tag">NODES INDEX</span>
+            <span class="card-meta mono"><span id="nodes-count">15</span>&nbsp;COMPONENTS</span>
+          </header>
+          <div class="nodes-list" id="nodes-index-list" role="list" aria-label="Component nodes — click to walk to one">
+            <!-- populated by hud.js -->
+          </div>
+        </section>
+
+        <!-- 2 + 3. Gauges row -->
+        <section class="card card-gauges">
+          <header class="card-head">
+            <span class="card-tag">TELEMETRY</span>
+            <span class="card-meta"><span class="dot dot-live"></span>LIVE</span>
+          </header>
+          <div class="gauge-row">
+            <div class="gauge" id="gauge-temp" data-min="0" data-max="120" data-amber="80" data-red="100">
+              <svg viewBox="0 0 200 130" class="gauge-svg" aria-hidden="true">
+                <path d="M 20 110 A 80 80 0 0 1 180 110" fill="none" stroke="#c2d4ee" stroke-width="10" stroke-linecap="butt"/>
+                <path d="M 20 110 A 80 80 0 0 1 126.7 36" fill="none" stroke="#1aa863" stroke-width="10"/>
+                <path d="M 126.7 36 A 80 80 0 0 1 166.3 70" fill="none" stroke="#e6a300" stroke-width="10"/>
+                <path d="M 166.3 70 A 80 80 0 0 1 180 110" fill="none" stroke="#d63a3a" stroke-width="10"/>
+                <g class="gauge-ticks">
+                  <line x1="100" y1="30" x2="100" y2="40" stroke="#5c7390" stroke-width="1"/>
+                  <line x1="20"  y1="110" x2="30" y2="110" stroke="#5c7390" stroke-width="1"/>
+                  <line x1="170" y1="110" x2="180" y2="110" stroke="#5c7390" stroke-width="1"/>
+                </g>
+                <g class="needle-group" data-needle>
+                  <line x1="100" y1="110" x2="100" y2="42" stroke="#003d80" stroke-width="2.4" stroke-linecap="round"/>
+                  <circle cx="100" cy="110" r="6" fill="#003d80"/>
+                  <circle cx="100" cy="110" r="2" fill="#ffffff"/>
+                </g>
+              </svg>
+              <div class="gauge-readout">
+                <span class="gauge-value mono" data-readout>73</span><span class="gauge-unit">&deg;C</span>
+              </div>
+              <div class="gauge-label">TEMPERATURE</div>
+            </div>
+
+            <div class="gauge" id="gauge-pressure" data-min="0" data-max="250" data-amber="180" data-red="220">
+              <svg viewBox="0 0 200 130" class="gauge-svg" aria-hidden="true">
+                <path d="M 20 110 A 80 80 0 0 1 180 110" fill="none" stroke="#c2d4ee" stroke-width="10"/>
+                <path d="M 20 110 A 80 80 0 0 1 135.4 38.4" fill="none" stroke="#1aa863" stroke-width="10"/>
+                <path d="M 135.4 38.4 A 80 80 0 0 1 173.4 79.6" fill="none" stroke="#e6a300" stroke-width="10"/>
+                <path d="M 173.4 79.6 A 80 80 0 0 1 180 110" fill="none" stroke="#d63a3a" stroke-width="10"/>
+                <g class="gauge-ticks">
+                  <line x1="100" y1="30" x2="100" y2="40" stroke="#5c7390" stroke-width="1"/>
+                  <line x1="20"  y1="110" x2="30" y2="110" stroke="#5c7390" stroke-width="1"/>
+                  <line x1="170" y1="110" x2="180" y2="110" stroke="#5c7390" stroke-width="1"/>
+                </g>
+                <g class="needle-group" data-needle>
+                  <line x1="100" y1="110" x2="100" y2="42" stroke="#003d80" stroke-width="2.4" stroke-linecap="round"/>
+                  <circle cx="100" cy="110" r="6" fill="#003d80"/>
+                  <circle cx="100" cy="110" r="2" fill="#ffffff"/>
+                </g>
+              </svg>
+              <div class="gauge-readout">
+                <span class="gauge-value mono" data-readout>165</span><span class="gauge-unit">PSI</span>
+              </div>
+              <div class="gauge-label">PRESSURE</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. Inspection form -->
+        <section class="card card-inspection">
+          <header class="card-head">
+            <span class="card-tag">INSPECTION</span>
+            <span class="card-meta status-ok">ON&nbsp;SCHEDULE</span>
+          </header>
+          <div class="form-row">
+            <span class="form-k">LAST</span>
+            <span class="form-v mono">2026&#8209;03&#8209;14 &middot; M.&nbsp;SALINAS</span>
+          </div>
+          <div class="form-row">
+            <span class="form-k">NEXT</span>
+            <span class="form-v mono">2026&#8209;06&#8209;14 <span class="form-due">(in&nbsp;20&nbsp;days)</span></span>
+          </div>
+          <label class="form-label" for="inspection-note">FIELD&nbsp;NOTE</label>
+          <textarea id="inspection-note" class="form-note" rows="3"
+            placeholder="Observed minor wear on bearing housing — schedule torque check"></textarea>
+        </section>
+
+        <!-- 5. Quick actions -->
+        <section class="card card-actions">
+          <header class="card-head">
+            <span class="card-tag">ACTIONS</span>
+          </header>
+          <div class="action-stack">
+            <button class="action-btn" type="button">OPEN&nbsp;WORK&nbsp;ORDER</button>
+            <button class="action-btn" type="button">VIEW&nbsp;MANUAL</button>
+            <button class="action-btn action-btn-warn" type="button">FLAG&nbsp;ISSUE</button>
+          </div>
+        </section>
+
+        <!-- 6. Event log -->
+        <section class="card card-log">
+          <header class="card-head">
+            <span class="card-tag">EVENT&nbsp;LOG</span>
+            <span class="card-meta">LAST&nbsp;5</span>
+          </header>
+          <ul class="event-list" id="event-list">
+            <li class="event event-new">
+              <span class="sev sev-amber"></span>
+              <span class="t mono">14:02:11</span>
+              <span class="m">Vibration alert &mdash; pump A-3 above threshold</span>
+            </li>
+            <li class="event">
+              <span class="sev sev-green"></span>
+              <span class="t mono">13:48:02</span>
+              <span class="m">Temperature normalised post-cycle</span>
+            </li>
+            <li class="event">
+              <span class="sev sev-green"></span>
+              <span class="t mono">09:15:44</span>
+              <span class="m">Weekly inspection complete &middot; signed</span>
+            </li>
+            <li class="event">
+              <span class="sev sev-green"></span>
+              <span class="t mono">08:02:09</span>
+              <span class="m">Parts shipment received &middot; PO-4471</span>
+            </li>
+            <li class="event">
+              <span class="sev sev-red"></span>
+              <span class="t mono">07:33:51</span>
+              <span class="m">Calibration pending &middot; sensor T-12</span>
+            </li>
+          </ul>
+        </section>
+
+        <!-- 7. Training video -->
+        <section class="card card-training">
+          <header class="card-head">
+            <span class="card-tag">TRAINING</span>
+            <span class="card-meta">EQUIPMENT&nbsp;WALKTHROUGH</span>
+          </header>
+          <div class="video-wrap">
+            <iframe
+              src="https://www.youtube-nocookie.com/embed/jNQXAC9IVRw?rel=0&amp;modestbranding=1"
+              title="Training video"
+              loading="lazy"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allow="accelerometer; encrypted-media; picture-in-picture"
+              allowfullscreen></iframe>
+          </div>
+          <p class="video-note">Swap iframe video ID for engagement-specific training content.</p>
+        </section>
+
+      </aside>
     </section>
 
     <footer class="foot">
-      <span>HUD shell · re-skinnable per engagement</span>
-      <span>template <b>v0.1</b> · powered by <b>Bonfire</b></span>
+      <span>NAPS&nbsp;VAULT &middot; SAINT-SULPICE &middot; ASSET&nbsp;SS-014</span>
+      <span>HUD shell <b>v0.2</b> &middot; powered by <b>Bonfire</b></span>
     </footer>
   </main>
 
+  <!-- Floating station tooltip (positioned by JS) -->
+  <div id="station-tooltip" class="station-tooltip" hidden></div>
+
   <!--
-    Dual watermark · CandyFactory + Bonfire.
-    ~32px tall, 60% opacity, links to candyfactory.ai in a new tab.
-    Keep visible on shipped engagements — it's the maker's mark.
+    Dual watermark · CandyFactory + Bonfire. Keep visible on shipped engagements.
   -->
   <a class="watermark" href="https://candyfactory.ai" target="_blank" rel="noopener" aria-label="Built by CandyFactory · powered by Bonfire">
     <span><span class="cf-candy">Candy</span><span class="cf-factory">Factory</span></span>
@@ -113,13 +322,7 @@
     <span class="bonfire">Bonfire</span>
   </a>
 
-  <!--
-    Potree vendor libs · sourced from /assets/vendor/potree/ which the CLI
-    orchestrator vendors on first run. Load order matches Potree 1.8.2's
-    viewer.html template. hud.js reads window.Potree after these resolve.
-    Order matters: jquery → spectrum → jquery-ui → BinaryHeap → tween → d3 →
-    proj4 → openlayers3 → i18next → jstree → potree → laslaz.
-  -->
+  <!-- Potree vendor libs · order matches Potree 1.8.2 viewer.html template -->
   <script src="/assets/vendor/potree/libs/jquery/jquery-3.1.1.min.js"></script>
   <script src="/assets/vendor/potree/libs/spectrum/spectrum.js"></script>
   <script src="/assets/vendor/potree/libs/jquery-ui/jquery-ui.min.js"></script>
